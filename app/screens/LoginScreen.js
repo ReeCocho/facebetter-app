@@ -5,6 +5,7 @@ import {
 	Image,
 	Text,
 	ScrollView,
+	Alert,
 } from "react-native";
 import React, { useState } from "react";
 import Logo from "../assets/images/Logo.png";
@@ -15,13 +16,40 @@ export default function LoginScreen() {
 	const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");
 	const { height } = useWindowDimensions();
-	const onSignInPressed = () => {
-		//TODO check if username and password have been given
-        if (username.trim() === '' || password.trim() === '') {
-            console.warn("Please Enter Username and Password");    
-        } else {
-            console.warn("Sing in Pressed"); 
-        }
+	const onSignInPressed = async () => {
+		if (username.trim() === "" || password.trim() === "") {
+			console.warn("Please Enter Username and Password");
+			return;
+		}
+		let res;
+		try {
+			res = await fetch("http://localhost:8001/api/login", {
+				method: "POST",
+				headers: {
+					Accept: "application/json",
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({
+					login: username.toLowerCase(),
+					password: password,
+				}),
+			});
+			res = await res.json();
+		} catch (error) {
+			Alert.alert("Something Went Wrong", "Please Try Again Later", [
+				{ text: "OK", onPress: () => console.log("OK Pressed") },
+			]);
+			console.error(error);
+			return;
+		}
+
+		if (res.id !== -1) {
+			console.warn("Logged In");
+		} else {
+			Alert.alert("Incorrect Username or Password", "Please Try Again", [
+				{ text: "OK", onPress: () => console.log("OK Pressed") },
+			]);
+		}
 	};
 	const onForgotPasswordPressed = () => {
 		console.warn("Forgot Password Pressed");
@@ -37,7 +65,7 @@ export default function LoginScreen() {
 				justifyContent: "space-between",
 				flexDirection: "column",
 			}}
-			style={{paddingBottom: 20}}
+			style={{ paddingBottom: 20 }}
 		>
 			<View style={styles.root}>
 				<Image
@@ -69,7 +97,7 @@ export default function LoginScreen() {
 				</View>
 				<CustomButton
 					text={"Create new Account"}
-					onPress={onForgotPasswordPressed}
+					onPress={onCreateNewAccountPressed}
 					bgColor="#17B84E"
 				/>
 				<View style={styles.copyrightText}>
