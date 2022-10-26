@@ -1,18 +1,16 @@
 import { SafeAreaView, StyleSheet, Button, Text, View } from "react-native";
 import LoginScreen from "./app/screens/LoginScreen";
 import { LinearGradient } from "expo-linear-gradient";
+import Navigation from "./app/navigation/index";
 import React from "react";
 
 const App = () => {
 	return (
-		<SafeAreaView style={styles.root}>
-			<LinearGradient
-				colors={["#99ccff", "white"]}
-				style={styles.background}
-			>
-				<LoginScreen />
-			</LinearGradient>
-		</SafeAreaView>
+		<LinearGradient colors={["#99ccff", "white"]} style={styles.background}>
+			<SafeAreaView style={styles.root}>
+				<Navigation />
+			</SafeAreaView>
+		</LinearGradient>
 	);
 };
 
