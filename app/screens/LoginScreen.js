@@ -11,11 +11,13 @@ import React, { useState } from "react";
 import Logo from "../assets/images/Logo.png";
 import CustomInput from "../components/CustomInput";
 import CustomButton from "../components/CustomButton";
+import { useNavigation } from "@react-navigation/native";
 
 export default function LoginScreen() {
 	const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");
 	const { height } = useWindowDimensions();
+    const navigation = useNavigation();
 	const onSignInPressed = async () => {
 		if (username.trim() === "" || password.trim() === "") {
 			console.warn("Please Enter Username and Password");
@@ -42,9 +44,9 @@ export default function LoginScreen() {
 			console.error(error);
 			return;
 		}
-
 		if (res.id !== -1) {
-			console.warn("Logged In");
+            //navigate to home
+            // navigation.navigate("TestScreen");
 		} else {
 			Alert.alert("Incorrect Username or Password", "Please Try Again", [
 				{ text: "OK", onPress: () => console.log("OK Pressed") },
