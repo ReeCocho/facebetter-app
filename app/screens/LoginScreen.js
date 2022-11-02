@@ -99,7 +99,7 @@ export default function LoginScreen() {
 				</View>
 				<CustomButton
 					text={"Create new Account"}
-					onPress={onCreateNewAccountPressed}
+					onPress={() => navigation.navigate("RegisterScreen")}
 					bgColor="#17B84E"
 				/>
 				<View style={styles.copyrightText}>
@@ -109,6 +109,7 @@ export default function LoginScreen() {
 		</ScrollView>
 	);
 }
+
 const styles = StyleSheet.create({
 	root: {
 		flex: 1,
