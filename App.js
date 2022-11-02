@@ -6,18 +6,18 @@ import React from "react";
 
 const App = () => {
 	return (
-		<LinearGradient colors={["#99ccff", "white"]} style={styles.background}>
-			<SafeAreaView style={styles.root}>
-				<Navigation />
-			</SafeAreaView>
-		</LinearGradient>
+
+		<SafeAreaView style={styles.root}>
+			<Navigation />
+		</SafeAreaView>
+
 	);
 };
 
-const styles = StyleSheet.create({
+const styles = StyleSheet.create({ 
 	root: {
 		flex: 1,
-		// backgroundColor: "#F9FBFC",
+		//backgroundColor: "#F9FBFC",
 	},
 	background: {
 		flex: 1,

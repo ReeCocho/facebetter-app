@@ -11,6 +11,7 @@ import React, { useState } from "react";
 import Logo from "../assets/images/Logo.png";
 import CustomInput from "../components/CustomInput";
 import CustomButton from "../components/CustomButton";
+import { LinearGradient } from "expo-linear-gradient";
 
 export default function LoginScreen() {
     const [firstName, setFirstName] = useState("");
@@ -84,63 +85,65 @@ export default function LoginScreen() {
 
     
     return (
-		<ScrollView
-			contentContainerStyle={{
-				flexGrow: 1,
-				justifyContent: "space-between",
-				flexDirection: "column",
-			}}
-			style={{paddingBottom: 20}}
-		>
-			<View style={styles.root}>
-				<Image
-					source={Logo}
-					style={[styles.logo, { height: height * 0.3 }]}
-					resizeMode="contain"
-				/>
-				<CustomInput
-					onChangeText={setFirstName}
-					value={firstName}
-					placeholder="Enter Your First Name"
-				/>
-				<CustomInput
-					onChangeText={setLastName}
-					value={lastName}
-					placeholder="Enter Your Last Name"
-				/>
+		<LinearGradient colors={["#488ED4", "white"]} style={styles.linearGradient}>
+			<ScrollView
+				contentContainerStyle={{
+					flexGrow: 1,
+					justifyContent: "space-between",
+					flexDirection: "column",
+				}}
+				style={{paddingBottom: 20}}
+			>
+				<View style={styles.root}>
+					<Image
+						source={Logo}
+						style={[styles.logo, { height: height * 0.3 }]}
+						resizeMode="contain"
+					/>
+					<CustomInput
+						onChangeText={setFirstName}
+						value={firstName}
+						placeholder="Enter Your First Name"
+					/>
+					<CustomInput
+						onChangeText={setLastName}
+						value={lastName}
+						placeholder="Enter Your Last Name"
+					/>
 
-                <CustomInput
-					onChangeText={setUsername}
-					value={username}
-					placeholder="Choose Your Username"
-				/>
+					<CustomInput
+						onChangeText={setUsername}
+						value={username}
+						placeholder="Choose Your Username"
+					/>
 
-                <CustomInput
-					onChangeText={setPassword}
-					value={password}
-					placeholder="Chose Your Password"
-					secureTextEntry={true}
-				/>
+					<CustomInput
+						onChangeText={setPassword}
+						value={password}
+						placeholder="Chose Your Password"
+						secureTextEntry={true}
+					/>
 
-				<CustomInput
-					onChangeText={setSchool}
-					value={school}
-					placeholder="Where did you go to school? (optional)"
-				/>
+					<CustomInput
+						onChangeText={setSchool}
+						value={school}
+						placeholder="Where did you go to school? (optional)"
+					/>
 
-				<CustomInput
-					onChangeText={setWork}
-					value={work}
-					placeholder="What's your occupation? (optional)"
-				/>
+					<CustomInput
+						onChangeText={setWork}
+						value={work}
+						placeholder="What's your occupation? (optional)"
+					/>
 
 
-				<CustomButton text={"Create Account"} onPress={onCreateAccountPressed} />
-				<View style={styles.copyrightText}>
-					<Text>Group 8 ⓒ 2022</Text>
+					<CustomButton text={"Create Account"} onPress={onCreateAccountPressed} />
+					<View style={styles.copyrightText}>
+						<Text>Group 8 ⓒ 2022</Text>
+					</View>
 				</View>
-			</View>
-		</ScrollView>
+			</ScrollView>
+		</LinearGradient>
 	);
 
 }
