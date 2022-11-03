@@ -12,6 +12,7 @@ import Logo from "../assets/images/Logo.png";
 import CustomInput from "../components/CustomInput";
 import CustomButton from "../components/CustomButton";
 import { useNavigation } from "@react-navigation/native";
+import { LinearGradient } from "expo-linear-gradient";
 
 export default function LoginScreen() {
 	const [username, setUsername] = useState("");
@@ -61,52 +62,54 @@ export default function LoginScreen() {
 	};
 
 	return (
-		<ScrollView
-			contentContainerStyle={{
-				flexGrow: 1,
-				justifyContent: "space-between",
-				flexDirection: "column",
-			}}
-			style={{ paddingBottom: 20 }}
-		>
-			<View style={styles.root}>
-				<Image
-					source={Logo}
-					style={[styles.logo, { height: height * 0.3 }]}
-					resizeMode="contain"
-				/>
-				<CustomInput
-					onChangeText={setUsername}
-					value={username}
-					placeholder="Enter Your Username"
-				/>
-				<CustomInput
-					onChangeText={setPassword}
-					value={password}
-					placeholder="Enter Your Password"
-					secureTextEntry={true}
-				/>
-				<CustomButton text={"Log In"} onPress={onSignInPressed} />
-				<CustomButton
-					text={"Forgot Password"}
-					onPress={onForgotPasswordPressed}
-					type="TERTIARY"
-				/>
-				<View style={styles.textLineView}>
-					<View style={styles.line} />
-					<Text style={styles.text}>or</Text>
-					<View style={styles.line} />
+		<LinearGradient colors={["#488ED4", "white"]} style={styles.linearGradient}>
+			<ScrollView
+				contentContainerStyle={{
+					flexGrow: 1,
+					justifyContent: "space-between",
+					flexDirection: "column",
+				}}
+				style={{ paddingBottom: 20 }}
+			>
+				<View style={styles.root}>
+					<Image
+						source={Logo}
+						style={[styles.logo, { height: height * 0.3 }]}
+						resizeMode="contain"
+					/>
+					<CustomInput
+						onChangeText={setUsername}
+						value={username}
+						placeholder="Enter Your Username"
+					/>
+					<CustomInput
+						onChangeText={setPassword}
+						value={password}
+						placeholder="Enter Your Password"
+						secureTextEntry={true}
+					/>
+					<CustomButton text={"Log In"} onPress={onSignInPressed} />
+					<CustomButton
+						text={"Forgot Password"}
+						onPress={onForgotPasswordPressed}
+						type="TERTIARY"
+					/>
+					<View style={styles.textLineView}>
+						<View style={styles.line} />
+						<Text style={styles.text}>or</Text>
+						<View style={styles.line} />
+					</View>
+					<CustomButton
+						text={"Create new Account"}
+						onPress={() => navigation.navigate("RegisterScreen")}
+						bgColor="#17B84E"
+					/>
+					<View style={styles.copyrightText} >
+						<Text>Group 8 ⓒ 2022</Text>
+					</View>
 				</View>
-				<CustomButton
-					text={"Create new Account"}
-					onPress={() => navigation.navigate("RegisterScreen")}
-					bgColor="#17B84E"
-				/>
-				<View style={styles.copyrightText}>
-					<Text>Group 8 ⓒ 2022</Text>
-				</View>
-			</View>
-		</ScrollView>
+			</ScrollView>
+		</LinearGradient>
 	);
 }
 
@@ -141,4 +144,7 @@ const styles = StyleSheet.create({
 		justifyContent: "flex-end",
 		color: "#A0A0A0",
 	},
+	linearGradient: {
+		flex: 1,
+	}
 });
