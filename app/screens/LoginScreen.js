@@ -47,7 +47,7 @@ export default function LoginScreen() {
 		}
 		if (res.id !== -1) {
             //navigate to home
-            // navigation.navigate("TestScreen");
+            navigation.navigate("ProfileScreen");
 		} else {
 			Alert.alert("Incorrect Username or Password", "Please Try Again", [
 				{ text: "OK", onPress: () => console.log("OK Pressed") },
