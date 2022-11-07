@@ -1,6 +1,4 @@
 import { SafeAreaView, StyleSheet, Button, Text, View } from "react-native";
-import LoginScreen from "./app/screens/LoginScreen";
-import { LinearGradient } from "expo-linear-gradient";
 import Navigation from "./app/navigation/index";
 import React from "react";
 
