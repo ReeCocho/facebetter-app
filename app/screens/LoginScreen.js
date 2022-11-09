@@ -15,6 +15,7 @@ import { useNavigation } from "@react-navigation/native";
 import { LinearGradient } from "expo-linear-gradient";
 import jwt_decode from "jwt-decode";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import md5 from "md5";
 
 export default function LoginScreen() {
 	const [username, setUsername] = useState("");
@@ -36,7 +37,7 @@ export default function LoginScreen() {
 				},
 				body: JSON.stringify({
 					Login: username.toLowerCase(),
-					Password: password,
+					Password: md5(password),
 				}),
 			});
 			res = await res.json();
@@ -68,7 +69,7 @@ export default function LoginScreen() {
 		console.warn("Forgot Password Pressed");
 	};
 	const onCreateNewAccountPressed = () => {
-		navigation.navigate("RegisterScreen")
+		navigation.navigate("RegisterScreen");
 	};
 
 	return (

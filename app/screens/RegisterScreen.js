@@ -12,9 +12,10 @@ import Logo from "../assets/images/Logo.png";
 import CustomInput from "../components/CustomInput";
 import CustomButton from "../components/CustomButton";
 import { LinearGradient } from "expo-linear-gradient";
+import md5 from "md5";
 
 export default function LoginScreen() {
-    const [firstName, setFirstName] = useState("");
+	const [firstName, setFirstName] = useState("");
 	const [lastName, setLastName] = useState("");
 	const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");
@@ -22,26 +23,24 @@ export default function LoginScreen() {
 	const [work, setWork] = useState("");
 	const { height } = useWindowDimensions();
 	const onCreateAccountPressed = async () => {
-
 		console.warn("Create account Pressed");
-		
+
 		//check if firstname is entered
-		if(firstName.trim() === "") {
+		if (firstName.trim() === "") {
 			console.warn("Please enter your First Name");
 		}
 		//check if lastname is entered
-		if(lastName.trim() === "") {
+		if (lastName.trim() === "") {
 			console.warn("Please enter your Last Name");
 		}
 		//check if username is entered
-		if(username.trim() === "") {
+		if (username.trim() === "") {
 			console.warn("Please enter an Username");
 		}
 		//check if password is entered
-		if(password.trim() === "") {
+		if (password.trim() === "") {
 			console.warn("Please enter a Password");
 		}
-
 
 		//send sign up info
 		let res;
@@ -54,12 +53,12 @@ export default function LoginScreen() {
 				},
 				body: JSON.stringify({
 					Login: username.toLowerCase(),
-					Password: password,
+					Password: md5(password),
 					FirstName: firstName,
 					LastName: lastName,
 					School: school,
 					Work: work,
-				})
+				}),
 			});
 			res = await res.json();
 		} catch (error) {
@@ -72,27 +71,31 @@ export default function LoginScreen() {
 		}
 
 		//account successfully created
-		if(res.Error === null) {
+		if (res.Error === null) {
 			console.warn("Account Created");
 		} else {
-			Alert.alert("Cannot Create Account", JSON.stringify(res.Error).replace(/['"]+/g, ''), [
-				{ text: "OK", onPress: () => console.log("OK Pressed") },
-			]);
+			Alert.alert(
+				"Cannot Create Account",
+				JSON.stringify(res.Error).replace(/['"]+/g, ""),
+				[{ text: "OK", onPress: () => console.log("OK Pressed") }]
+			);
 			console.error(res.Error);
 			return;
 		}
 	};
 
-    
-    return (
-		<LinearGradient colors={["#488ED4", "white"]} style={styles.linearGradient}>
+	return (
+		<LinearGradient
+			colors={["#488ED4", "white"]}
+			style={styles.linearGradient}
+		>
 			<ScrollView
 				contentContainerStyle={{
 					flexGrow: 1,
 					justifyContent: "space-between",
 					flexDirection: "column",
 				}}
-				style={{paddingBottom: 20}}
+				style={{ paddingBottom: 20 }}
 			>
 				<View style={styles.root}>
 					<Image
@@ -136,8 +139,10 @@ export default function LoginScreen() {
 						placeholder="What's your occupation? (optional)"
 					/>
 
-
-					<CustomButton text={"Create Account"} onPress={onCreateAccountPressed} />
+					<CustomButton
+						text={"Create Account"}
+						onPress={onCreateAccountPressed}
+					/>
 					<View style={styles.copyrightText}>
 						<Text>Group 8 ⓒ 2022</Text>
 					</View>
@@ -145,7 +150,6 @@ export default function LoginScreen() {
 			</ScrollView>
 		</LinearGradient>
 	);
-
 }
 
 const styles = StyleSheet.create({
@@ -175,5 +179,3 @@ const styles = StyleSheet.create({
 		color: "#A0A0A0",
 	},
 });
-
-
