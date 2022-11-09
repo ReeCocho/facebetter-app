@@ -13,12 +13,14 @@ import CustomInput from "../components/CustomInput";
 import CustomButton from "../components/CustomButton";
 import { useNavigation } from "@react-navigation/native";
 import { LinearGradient } from "expo-linear-gradient";
+import jwt_decode from "jwt-decode";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function LoginScreen() {
 	const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");
 	const { height } = useWindowDimensions();
-    const navigation = useNavigation();
+	const navigation = useNavigation();
 	const onSignInPressed = async () => {
 		if (username.trim() === "" || password.trim() === "") {
 			console.warn("Please Enter Username and Password");
@@ -33,8 +35,8 @@ export default function LoginScreen() {
 					"Content-Type": "application/json",
 				},
 				body: JSON.stringify({
-					login: username.toLowerCase(),
-					password: password,
+					Login: username.toLowerCase(),
+					Password: password,
 				}),
 			});
 			res = await res.json();
@@ -45,9 +47,17 @@ export default function LoginScreen() {
 			console.error(error);
 			return;
 		}
-		if (res.id !== -1) {
-            //navigate to home
-            navigation.navigate("ProfileScreen");
+
+		if (res.Error === null) {
+			try {
+				jwtToken = res["JwtToken"]["accessToken"];
+				decodedToken = JSON.stringify(jwt_decode(jwtToken));
+				//save jwt using Async Storage
+				await AsyncStorage.setItem("UserInfo", decodedToken);
+			} catch (error) {
+				console.error(error);
+			}
+			navigation.navigate("ProfileScreen");
 		} else {
 			Alert.alert("Incorrect Username or Password", "Please Try Again", [
 				{ text: "OK", onPress: () => console.log("OK Pressed") },
@@ -58,11 +68,14 @@ export default function LoginScreen() {
 		console.warn("Forgot Password Pressed");
 	};
 	const onCreateNewAccountPressed = () => {
-		console.warn("Create New Account Pressed");
+		navigation.navigate("RegisterScreen")
 	};
 
 	return (
-		<LinearGradient colors={["#488ED4", "white"]} style={styles.linearGradient}>
+		<LinearGradient
+			colors={["#488ED4", "white"]}
+			style={styles.linearGradient}
+		>
 			<ScrollView
 				contentContainerStyle={{
 					flexGrow: 1,
@@ -101,10 +114,10 @@ export default function LoginScreen() {
 					</View>
 					<CustomButton
 						text={"Create new Account"}
-						onPress={() => navigation.navigate("RegisterScreen")}
+						onPress={onCreateNewAccountPressed}
 						bgColor="#17B84E"
 					/>
-					<View style={styles.copyrightText} >
+					<View style={styles.copyrightText}>
 						<Text>Group 8 ⓒ 2022</Text>
 					</View>
 				</View>
@@ -146,5 +159,5 @@ const styles = StyleSheet.create({
 	},
 	linearGradient: {
 		flex: 1,
-	}
+	},
 });
