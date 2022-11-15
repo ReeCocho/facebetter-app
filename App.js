@@ -1,21 +1,22 @@
 import { SafeAreaView, StyleSheet, Button, Text, View } from "react-native";
-import Navigation from "./app/navigation/index";
 import React from "react";
+import StackNavigator from "/Users/gianmarcof/Documents/Personal/Programming/Projects/COP4331C-Facebetter/facebetter-app/app/navigation/index.js";
+import { LoginStatusProvider } from "./app/context/LoginStatusProvider";
 
 const App = () => {
 	return (
-
-		<SafeAreaView style={styles.root}>
-			<Navigation />
-		</SafeAreaView>
-
+		<LoginStatusProvider>
+			<SafeAreaView style={styles.root}>
+				<StackNavigator />
+			</SafeAreaView>
+		</LoginStatusProvider>
 	);
 };
 
-const styles = StyleSheet.create({ 
+const styles = StyleSheet.create({
 	root: {
 		flex: 1,
-		//backgroundColor: "#F9FBFC",
+		// backgroundColor: "#F9FBFC",
 	},
 	background: {
 		flex: 1,
