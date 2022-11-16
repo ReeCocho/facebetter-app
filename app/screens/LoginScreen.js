@@ -1,19 +1,12 @@
-import {
-	StyleSheet,
-	useWindowDimensions,
-	View,
-	Image,
-	Text,
-	ScrollView,
-	Alert,
-} from "react-native";
-import React, { useState } from "react";
+import { StyleSheet, useWindowDimensions, View, Image, Text, ScrollView, Alert } from "react-native";
+import React, { useState, useContext } from "react";
 import Logo from "../assets/images/Logo.png";
 import CustomInput from "../components/CustomInput";
 import CustomButton from "../components/CustomButton";
 import { useNavigation } from "@react-navigation/native";
-import { LinearGradient } from "expo-linear-gradient";
-import jwt_decode from "jwt-decode";
+import { signIn, fetchUser } from "../api/user.js";
+import LoginStatusProvider from "../context/LoginStatusProvider";
+import jwtDecode from "jwt-decode";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function LoginScreen() {
@@ -21,25 +14,37 @@ export default function LoginScreen() {
 	const [password, setPassword] = useState("");
 	const { height } = useWindowDimensions();
 	const navigation = useNavigation();
+	const { setjwtToken, setProfile, ...loginContext } = useContext(LoginStatusProvider);
+
 	const onSignInPressed = async () => {
+		//todo implement form checking
 		if (username.trim() === "" || password.trim() === "") {
 			console.warn("Please Enter Username and Password");
 			return;
 		}
-		let res;
 		try {
-			res = await fetch("http://localhost:8001/api/login", {
-				method: "POST",
-				headers: {
-					Accept: "application/json",
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify({
-					Login: username.toLowerCase(),
-					Password: password,
-				}),
-			});
-			res = await res.json();
+			let response = await signIn(username, password);
+			// let response = await signIn("test01", "test");
+			if (response.Error !== null) {
+				Alert.alert("Incorrect Username or Password", "Please Try Again", [
+					{ text: "OK", onPress: () => console.log("OK Pressed") },
+				]);
+				return;
+			}
+			//get profile
+			token = await AsyncStorage.getItem("token");
+			response = await fetchUser(jwtDecode(token)["userId"]);
+			if (response.Error !== null) {
+				//todo: look into throwing error instead
+				Alert.alert("Something Went Wrong", "Please Try Again Later", [
+					{ text: "OK", onPress: () => console.log("OK Pressed") },
+				]);
+				console.log("Error getting user profile", response.Error);
+				return;
+			}
+			const { Error, ...profile } = response;
+			setProfile(profile);
+			setjwtToken(token);
 		} catch (error) {
 			Alert.alert("Something Went Wrong", "Please Try Again Later", [
 				{ text: "OK", onPress: () => console.log("OK Pressed") },
@@ -47,82 +52,48 @@ export default function LoginScreen() {
 			console.error(error);
 			return;
 		}
-
-		if (res.Error === null) {
-			try {
-				jwtToken = res["JwtToken"]["accessToken"];
-				decodedToken = JSON.stringify(jwt_decode(jwtToken));
-				//save jwt using Async Storage
-				await AsyncStorage.setItem("UserInfo", decodedToken);
-			} catch (error) {
-				console.error(error);
-			}
-			navigation.navigate("ProfileScreen");
-		} else {
-			Alert.alert("Incorrect Username or Password", "Please Try Again", [
-				{ text: "OK", onPress: () => console.log("OK Pressed") },
-			]);
-		}
 	};
+
 	const onForgotPasswordPressed = () => {
 		console.warn("Forgot Password Pressed");
 	};
+
 	const onCreateNewAccountPressed = () => {
-		navigation.navigate("RegisterScreen")
+		navigation.navigate("RegisterScreen");
 	};
 
 	return (
-		<LinearGradient
-			colors={["#488ED4", "white"]}
-			style={styles.linearGradient}
+		<ScrollView
+			contentContainerStyle={{
+				flexGrow: 1,
+				justifyContent: "space-between",
+				flexDirection: "column",
+			}}
+			style={{ paddingBottom: 20 }}
 		>
-			<ScrollView
-				contentContainerStyle={{
-					flexGrow: 1,
-					justifyContent: "space-between",
-					flexDirection: "column",
-				}}
-				style={{ paddingBottom: 20 }}
-			>
-				<View style={styles.root}>
-					<Image
-						source={Logo}
-						style={[styles.logo, { height: height * 0.3 }]}
-						resizeMode="contain"
-					/>
-					<CustomInput
-						onChangeText={setUsername}
-						value={username}
-						placeholder="Enter Your Username"
-					/>
-					<CustomInput
-						onChangeText={setPassword}
-						value={password}
-						placeholder="Enter Your Password"
-						secureTextEntry={true}
-					/>
-					<CustomButton text={"Log In"} onPress={onSignInPressed} />
-					<CustomButton
-						text={"Forgot Password"}
-						onPress={onForgotPasswordPressed}
-						type="TERTIARY"
-					/>
-					<View style={styles.textLineView}>
-						<View style={styles.line} />
-						<Text style={styles.text}>or</Text>
-						<View style={styles.line} />
-					</View>
-					<CustomButton
-						text={"Create new Account"}
-						onPress={onCreateNewAccountPressed}
-						bgColor="#17B84E"
-					/>
-					<View style={styles.copyrightText}>
-						<Text>Group 8 ⓒ 2022</Text>
-					</View>
+			<View style={styles.root}>
+				<Image source={Logo} style={[styles.logo, { height: height * 0.3 }]} resizeMode="contain" />
+				<CustomInput onChangeText={setUsername} value={username} placeholder="Enter Your Username" />
+				<CustomInput
+					//todo change autocapitalize to none
+					onChangeText={setPassword}
+					value={password}
+					placeholder="Enter Your Password"
+					secureTextEntry={true}
+				/>
+				<CustomButton text={"Log In"} onPress={onSignInPressed} />
+				<CustomButton text={"Forgot Password"} onPress={onForgotPasswordPressed} type="TERTIARY" />
+				<View style={styles.textLineView}>
+					<View style={styles.line} />
+					<Text style={styles.text}>or</Text>
+					<View style={styles.line} />
 				</View>
-			</ScrollView>
-		</LinearGradient>
+				<CustomButton text={"Create new Account"} onPress={onCreateNewAccountPressed} bgColor="#17B84E" />
+				<View style={styles.copyrightText}>
+					<Text>Group 8 ⓒ 2022</Text>
+				</View>
+			</View>
+		</ScrollView>
 	);
 }
 
@@ -156,8 +127,5 @@ const styles = StyleSheet.create({
 		flex: 1,
 		justifyContent: "flex-end",
 		color: "#A0A0A0",
-	},
-	linearGradient: {
-		flex: 1,
 	},
 });

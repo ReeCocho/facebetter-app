@@ -1,37 +1,30 @@
-import { StyleSheet, View, Image, Text, SafeAreaView } from "react-native";
-import React, { useEffect, useState } from "react";
+import { StyleSheet, View, Image, Text, SafeAreaView, Alert } from "react-native";
+import React, { useState, useContext } from "react";
 import ProfilePicture from "../assets/images/profilePic.jpg";
-import CustomInput from "../components/CustomInput";
-import CustomButton from "../components/CustomButton";
 import EditProfileButton from "../components/EditProfileButton";
 import { useNavigation } from "@react-navigation/native";
 import Settings from "react-native-vector-icons/Feather";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as ImagePicker from "expo-image-picker";
+import LoginStatusProvider from "../context/LoginStatusProvider";
 
 export default function ProfileScreen() {
-	const [userValues, setUserValues] = useState(null);
-	// return of api
-	// {"Error": null, "FirstName": "Test", "Following": ["6344e4ea7c568d2a25ed0f6f"], "Id": "634b740db076952180cb8e5a", "LastName": "User", "School": "", "Work": ""}
-	useEffect(() => {
-		const getProfileData = async () => {
-			const JSONuserInfo = await AsyncStorage.getItem("UserInfo");
-			const userInfo =
-				JSONuserInfo != null ? JSON.parse(JSONuserInfo) : null;
-			res = await fetch("http://localhost:8001/api/retrieveprofile", {
-				method: "POST",
-				headers: {
-					Accept: "application/json",
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify({
-					_id: userInfo.userId,
-				}),
-			});
-			res = await res.json();
-			setUserValues(res);
-		};
-		getProfileData().catch(console.error);
-	}, []);
+	const [image, setImage] = useState(null);
+	const navigation = useNavigation();
+	const { profile, setProfile, setIsSigningOut, ...loginContext } = useContext(LoginStatusProvider);
+
+	const pickImage = async () => {
+		// No permissions request is necessary for launching the image library
+		let result = await ImagePicker.launchImageLibraryAsync({
+			mediaTypes: ImagePicker.MediaTypeOptions.All,
+			allowsEditing: true,
+			aspect: [4, 3],
+			quality: 1,
+		});
+
+		if (!result.cancelled) {
+			setImage(result.uri);
+		}
+	};
 
 	const onSettingPressed = () => {
 		console.log("settings pressed");
@@ -49,16 +42,15 @@ export default function ProfileScreen() {
 			}}
 			style={{ paddingBottom: 20 }}
 		>
-			{userValues && (
+			{profile && (
 				<View>
 					<View style={[styles.profileContainer]}>
 						<Image
-							source={ProfilePicture}
+							source={image == null ? ProfilePicture : { uri: image }}
 							style={[styles.profile]}
 							resizeMode="contain"
 						/>
 					</View>
-
 					<Settings
 						onPress={onSettingPressed}
 						name="settings"
@@ -68,16 +60,11 @@ export default function ProfileScreen() {
 					/>
 
 					<View styles={styles.editProfileButton}>
-						<EditProfileButton
-							text={"Edit Profile"}
-							onPress={onEditProfilePressed}
-						/>
+						<EditProfileButton text={"Edit Profile"} onPress={pickImage} />
 					</View>
 
 					<View style={styles.nameContainer}>
-						<Text style={styles.name}>
-							{userValues.FirstName + " " + userValues.LastName}
-						</Text>
+						<Text style={styles.name}>{profile.FirstName + " " + profile.LastName}</Text>
 					</View>
 
 					<View style={styles.userNameContainer}>
@@ -89,7 +76,7 @@ export default function ProfileScreen() {
 					</View>
 
 					<View style={styles.followingContainer}>
-						<Text>122 Following</Text>
+						<Text>{profile.Following.length} Following</Text>
 					</View>
 
 					<View style={styles.textLineView}>
