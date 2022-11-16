@@ -1,11 +1,17 @@
-import { StyleSheet, View, Image, Text, SafeAreaView, Alert } from "react-native";
+import { StyleSheet, View, Image, Text, SafeAreaView, Dimensions, Alert } from "react-native";
 import React, { useState, useContext } from "react";
 import ProfilePicture from "../assets/images/profilePic.jpg";
 import EditProfileButton from "../components/EditProfileButton";
 import { useNavigation } from "@react-navigation/native";
-import Settings from "react-native-vector-icons/Feather";
 import * as ImagePicker from "expo-image-picker";
 import LoginStatusProvider from "../context/LoginStatusProvider";
+import { moderateScale, scale } from "react-native-size-matters";
+import {widthPercentageToDP, heightPercentageToDP} from 'react-native-responsive-screen';
+import Work from "react-native-vector-icons/MaterialIcons";
+import School from "react-native-vector-icons/Ionicons";
+
+var height = Dimensions.get("window").height;
+var width = Dimensions.get("window").width;
 
 export default function ProfileScreen() {
 	const [image, setImage] = useState(null);
@@ -26,9 +32,6 @@ export default function ProfileScreen() {
 		}
 	};
 
-	const onSettingPressed = () => {
-		console.log("settings pressed");
-	};
 	const onEditProfilePressed = () => {
 		console.log("profile edit button pressed");
 	};
@@ -40,56 +43,93 @@ export default function ProfileScreen() {
 				justifyContent: "space-between",
 				flexDirection: "column",
 			}}
-			style={{ paddingBottom: 20 }}
+			style={{height: height / 4.3, borderBottomWidth: "2px", borderBottomColor: "black"}}
 		>
 			{profile && (
-				<View>
-					<View style={[styles.profileContainer]}>
+				<View style={{flex: 1}}>
+					<View style={[styles.profilePicContainer]}>
 						<Image
-							source={image == null ? ProfilePicture : { uri: image }}
-							style={[styles.profile]}
+							source={ProfilePicture}
+							style={[styles.profilePic]}
 							resizeMode="contain"
 						/>
 					</View>
-					<Settings
-						onPress={onSettingPressed}
-						name="settings"
-						size={30}
-						color={"#000"}
-						style={[styles.settingsIcon]}
-					/>
 
-					<View styles={styles.editProfileButton}>
-						<EditProfileButton text={"Edit Profile"} onPress={pickImage} />
+
+
+					<View style={[styles.profileNamesContainer]}>
+						<View style={styles.nameContainer}>
+							<Text style={styles.name}>
+								{profile.FirstName + " " + profile.LastName}
+							</Text>
+						</View>
+
+						<View style={styles.userNameContainer}>
+							<Text>{"@" + profile.Id}</Text>
+						</View>
+
+						<View >
+							<EditProfileButton
+								text={"Edit Profile"}
+								onPress={onEditProfilePressed}
+							/>
+						</View>
 					</View>
 
-					<View style={styles.nameContainer}>
-						<Text style={styles.name}>{profile.FirstName + " " + profile.LastName}</Text>
+					
+					<View style={styles.followInfoContainer}>
+						<View style={{
+							position: "relative",
+							flexDirection: "row",
+							justifyContent: "flex-start",
+							width: widthPercentageToDP(80),
+						}}>
+							<Text style={{fontSize: height * .018, fontWeight: "bold"}}>{profile.Followers}</Text>
+							<Text style={{fontSize: height * .018}}> Followers</Text>
+						</View>
+
+						<View style={{
+							position: "relative",
+							flexDirection: "row",
+							justifyContent: "flex-start",
+							width: widthPercentageToDP(80),
+						}}>
+							<Text style={{fontSize: height * .018, fontWeight: "bold"}}>{profile.Following}</Text>
+							<Text style={{fontSize: height * .018}}> Following</Text>
+						</View>					
 					</View>
 
-					<View style={styles.userNameContainer}>
-						<Text>@vaderSux</Text>
-					</View>
 
-					<View style={styles.followersContainer}>
-						<Text>25 Followers</Text>
-					</View>
+					
+					<View style={styles.workSchoolContainer}>
+						
+						<Work
+							name="work"
+							size={height * .025}
+							color={"#000"}
+						/> 
 
-					<View style={styles.followingContainer}>
-						<Text>{profile.Following.length} Following</Text>
-					</View>
+						<View style={styles.work}>
+							<Text style={{fontSize: height * .015}}>{profile.Work}</Text>
+						</View>
+						
+						<School
+							name="school"
+							size={height * .025}
+							color={"#000"}
+						/>
 
-					<View style={styles.textLineView}>
-						<View style={styles.line} />
-						<View style={styles.line} />
+						<View style={styles.school}>
+							<Text style={{fontSize: height * .015}}>{profile.School}</Text>
+						</View>
 					</View>
-
-					<View style={styles.messagesContainer}>
-						<Text>MESSAGES HERE</Text>
-					</View>
+					
+					
 				</View>
 			)}
+
 		</SafeAreaView>
+
 	);
 }
 
@@ -99,54 +139,83 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 		padding: 20,
 	},
-	profileContainer: {
-		marginLeft: 20,
-		marginTop: 50,
-		height: 150,
-		width: 150,
-		borderRadius: 75,
+	profilePicContainer: {
+		left: 10,
+		top: 12,
+		// flex: 1,
+		// height: 100,
+		// width: 100,
+		// borderRadius: 50,
 	},
-	profile: {
-		height: 150,
-		width: 150,
-		borderRadius: 75,
+	profilePic: {
+		height: height / 9,
+		width: height / 9,
+		borderRadius: height / 4.5,
+	},
+	profileNamesContainer: {
+		// flex: 1,
+		width: "70%",
+		height: height / 9.5,
+		marginLeft: width / 3.5,
+		marginTop: scale(-70),
+		position: "relative",
 	},
 	nameContainer: {
-		left: 200,
-		bottom: 165,
+		left: 10,
+		top: 10,
 	},
 	name: {
-		fontSize: 25,
+		fontSize: height * .03,
 		fontWeight: "bold",
 	},
 	userNameContainer: {
-		left: 200,
-		bottom: 160,
+		left: 10,
+		top: 10,
 	},
-	settingsIcon: {
-		marginLeft: 375,
-		bottom: 150,
+	followInfoContainer: {
+		width: widthPercentageToDP(80),
+		flex: .3,
+		flexDirection: "column",
+		justifyContent: "space-between",
+		alignItems: "flex-start",
+		left: 6,
+		top: 50
 	},
-	followersContainer: {
-		marginLeft: 200,
-		bottom: 145,
+	workSchoolContainer: {
+		position: "relative",
+		flex: .29,
+		flexDirection: "row",
+		justifyContent: "space-between",
+		alignItems: "flex-start",
+		height: heightPercentageToDP(0),
+		width: widthPercentageToDP(98),
+		left: 6,
+		top: -15
 	},
-	followingContainer: {
-		marginLeft: 310,
-		bottom: 162,
+	work: {
+		left: -19,
+		marginTop: 4
+	},
+	school: {
+		left: -18,
+		marginTop: 4
+	},
+	messagesContainer: {
+		backgroundColor: "orange",
+		top: 70,
+		alignItems: "center",
+		alignSelf: "center",
+		width: widthPercentageToDP(90)
 	},
 	textLineView: {
 		justifyContent: "center",
 		alignItems: "center",
 		flexDirection: "row",
-		bottom: 130,
+		height: height * .5
 	},
 	line: {
 		flex: 1,
 		borderBottomColor: "black",
 		borderBottomWidth: 2,
-	},
-	messagesContainer: {
-		alignItems: "center",
 	},
 });

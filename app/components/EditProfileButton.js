@@ -1,5 +1,8 @@
-import { View, Text, StyleSheet, Pressable } from "react-native";
+import { View, Text, StyleSheet, Pressable, Dimensions } from "react-native";
 import React from "react";
+
+var width = Dimensions.get("window").width;
+var height = Dimensions.get("window").height;
 
 const CustomButton = ({
 	onPress,
@@ -34,11 +37,13 @@ const CustomButton = ({
 
 const styles = StyleSheet.create({
 	container: {
-		width: "25%",
-		padding: 10,
+		width: width * .62,
+		height: height * .028,
+		padding: 3,
 		borderRadius: 5,
-		marginLeft: 220,
-		bottom: 182
+		marginLeft: 9,
+		top: 18,
+		alignItems: "center"
 	},
 	container_PRIMARY: {
 		backgroundColor: "#1757B8",
