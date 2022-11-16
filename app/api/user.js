@@ -27,7 +27,7 @@ export const signIn = async (username, password) => {
 	}
 };
 
-export const signUp = async (username, password, firstName, lastName, school, work) => {
+export const signUp = async (username, password, email, firstName, lastName, school, work) => {
 	try {
 		let response = await fetch("http://localhost:8001/api/register", {
 			method: "POST",
@@ -38,6 +38,7 @@ export const signUp = async (username, password, firstName, lastName, school, wo
 			body: JSON.stringify({
 				Login: username.toLowerCase(),
 				Password: await Crypto.digestStringAsync(CryptoDigestAlgorithm.SHA256, password),
+				Email: email,
 				FirstName: firstName,
 				LastName: lastName,
 				School: school,

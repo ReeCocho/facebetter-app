@@ -13,6 +13,7 @@ export default function LoginScreen() {
 	const [password, setPassword] = useState("");
 	const [school, setSchool] = useState("");
 	const [work, setWork] = useState("");
+	const [email, setEmail] = useState("");
 	const { height } = useWindowDimensions();
 
 	const onCreateAccountPressed = async () => {
@@ -25,7 +26,7 @@ export default function LoginScreen() {
 		}
 		//send sign up info
 		try {
-			const response = await signUp(username, password, firstName, lastName, school, work);
+			const response = await signUp(username, password, email, firstName, lastName, school, work);
 			//account successfully created
 			if (response.Error === null) {
 				//TODO: Navigate to Profile Page
@@ -60,8 +61,10 @@ export default function LoginScreen() {
 					<Image source={Logo} style={[styles.logo, { height: height * 0.3 }]} resizeMode="contain" />
 					<CustomInput onChangeText={setFirstName} value={firstName} placeholder="Enter Your First Name" />
 					<CustomInput onChangeText={setLastName} value={lastName} placeholder="Enter Your Last Name" />
-
+	
 					<CustomInput onChangeText={setUsername} value={username} placeholder="Choose Your Username" />
+
+					<CustomInput onChangeText={setEmail} value={email} placeholder="Enter Your Email" />
 
 					<CustomInput
 						onChangeText={setPassword}

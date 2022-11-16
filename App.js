@@ -1,6 +1,6 @@
 import { SafeAreaView, StyleSheet, Button, Text, View } from "react-native";
 import React from "react";
-import StackNavigator from "/Users/gianmarcof/Documents/Personal/Programming/Projects/COP4331C-Facebetter/facebetter-app/app/navigation/index.js";
+import StackNavigator from "./app/navigation/index.js";
 import { LoginStatusProvider } from "./app/context/LoginStatusProvider";
 
 const App = () => {
