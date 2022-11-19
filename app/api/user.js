@@ -72,4 +72,28 @@ export const fetchUser = async (id) => {
 	}
 };
 
+export const editProfile = async (Id, firstName, lastName, school, work, jwt) => {
+	try {
+		let response = await fetch("http://localhost:8001/api/editprofile", {
+			method: "POST",
+			headers: {
+				Accept: "application/json",
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({
+				_id: Id,
+				FirstName: firstName,
+				LastName: lastName,
+				School: school,
+				Work: work,
+				JwtToken: jwt
+			}),
+		});
+		response = await response.json();
+		return response;
+	} catch (error) {
+		console.log("error within edit profile call ", error.message);
+	}
+};
+
 export const validateJWT = async (jwt) => {};
