@@ -26,7 +26,7 @@ export default function LoginScreen() {
 			let response = await signIn(username, password);
 			// let response = await signIn("test01", "test");
 			if (response.Error !== null) {
-				Alert.alert("Incorrect Username or Password", "Please Try Again", [
+				Alert.alert(response.Error, "", [
 					{ text: "OK", onPress: () => console.log("OK Pressed") },
 				]);
 				return;

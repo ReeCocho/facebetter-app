@@ -1,4 +1,4 @@
-import { StyleSheet, View, Image, Text, SafeAreaView, Dimensions, Alert } from "react-native";
+import { StyleSheet, View, Image, Text, SafeAreaView, Dimensions, Alert, ScrollView } from "react-native";
 import React, { useState, useContext } from "react";
 import ProfilePicture from "../assets/images/profilePic.jpg";
 import EditProfileButton from "../components/EditProfileButton";
@@ -18,118 +18,107 @@ export default function ProfileScreen() {
 	const navigation = useNavigation();
 	const { profile, setProfile, setIsSigningOut, ...loginContext } = useContext(LoginStatusProvider);
 
-	const pickImage = async () => {
-		// No permissions request is necessary for launching the image library
-		let result = await ImagePicker.launchImageLibraryAsync({
-			mediaTypes: ImagePicker.MediaTypeOptions.All,
-			allowsEditing: true,
-			aspect: [4, 3],
-			quality: 1,
-		});
-
-		if (!result.cancelled) {
-			setImage(result.uri);
-		}
-	};
-
 	const onEditProfilePressed = () => {
-		console.log("profile edit button pressed");
+		console.log("edit profile pressed");
+		navigation.navigate("EditProfileScreen");
 	};
 
 	return (
-		<SafeAreaView
-			contentContainerStyle={{
-				flexGrow: 1,
-				justifyContent: "space-between",
-				flexDirection: "column",
-			}}
-			style={{height: height / 4.3, borderBottomWidth: "2px", borderBottomColor: "black"}}
-		>
-			{profile && (
-				<View style={{flex: 1}}>
-					<View style={[styles.profilePicContainer]}>
-						<Image
-							source={ProfilePicture}
-							style={[styles.profilePic]}
-							resizeMode="contain"
-						/>
-					</View>
-
-
-
-					<View style={[styles.profileNamesContainer]}>
-						<View style={styles.nameContainer}>
-							<Text style={styles.name}>
-								{profile.FirstName + " " + profile.LastName}
-							</Text>
-						</View>
-
-						<View style={styles.userNameContainer}>
-							<Text>{"@" + profile.Id}</Text>
-						</View>
-
-						<View >
-							<EditProfileButton
-								text={"Edit Profile"}
-								onPress={onEditProfilePressed}
+		<ScrollView>
+			<SafeAreaView
+				contentContainerStyle={{
+					flexGrow: 1,
+					justifyContent: "space-between",
+					flexDirection: "column",
+				}}
+				style={{height: height / 4.3, borderBottomWidth: "2px", borderBottomColor: "black"}}
+			>
+				{profile && (
+					<View style={{flex: 1}}>
+						<View style={[styles.profilePicContainer]}>
+							<Image
+								source={ProfilePicture}
+								style={[styles.profilePic]}
+								resizeMode="contain"
 							/>
 						</View>
-					</View>
 
-					
-					<View style={styles.followInfoContainer}>
-						<View style={{
-							position: "relative",
-							flexDirection: "row",
-							justifyContent: "flex-start",
-							width: widthPercentageToDP(80),
-						}}>
-							<Text style={{fontSize: height * .018, fontWeight: "bold"}}>{profile.Followers}</Text>
-							<Text style={{fontSize: height * .018}}> Followers</Text>
+
+
+						<View style={[styles.profileNamesContainer]}>
+							<View style={styles.nameContainer}>
+								<Text style={styles.name}>
+									{profile.FirstName + " " + profile.LastName}
+								</Text>
+							</View>
+
+							<View style={styles.userNameContainer}>
+								<Text>{"@" + profile.Id}</Text>
+							</View>
+
+							<View >
+								<EditProfileButton
+									text={"Edit Profile"}
+									onPress={onEditProfilePressed}
+								/>
+							</View>
 						</View>
 
-						<View style={{
-							position: "relative",
-							flexDirection: "row",
-							justifyContent: "flex-start",
-							width: widthPercentageToDP(80),
-						}}>
-							<Text style={{fontSize: height * .018, fontWeight: "bold"}}>{profile.Following}</Text>
-							<Text style={{fontSize: height * .018}}> Following</Text>
-						</View>					
-					</View>
-
-
-					
-					<View style={styles.workSchoolContainer}>
 						
-						<Work
-							name="work"
-							size={height * .025}
-							color={"#000"}
-						/> 
+						<View style={styles.followInfoContainer}>
+							<View style={{
+								position: "relative",
+								flexDirection: "row",
+								justifyContent: "flex-start",
+								width: widthPercentageToDP(80),
+							}}>
+								<Text style={{fontSize: height * .018, fontWeight: "bold"}}>{profile.Followers}</Text>
+								<Text style={{fontSize: height * .018}}> Followers</Text>
+							</View>
 
-						<View style={styles.work}>
-							<Text style={{fontSize: height * .015}}>{profile.Work}</Text>
+							<View style={{
+								position: "relative",
+								flexDirection: "row",
+								justifyContent: "flex-start",
+								width: widthPercentageToDP(80),
+							}}>
+								<Text style={{fontSize: height * .018, fontWeight: "bold"}}>{profile.Following}</Text>
+								<Text style={{fontSize: height * .018}}> Following</Text>
+							</View>					
+						</View>
+
+
+						
+						<View style={styles.workSchoolContainer}>
+							
+							<Work
+								name="work"
+								size={height * .025}
+								color={"#000"}
+							/> 
+
+							<View style={styles.work}>
+								<Text style={{fontSize: height * .015}}>{profile.Work}</Text>
+							</View>
+							
+							<School
+								name="school"
+								size={height * .025}
+								color={"#000"}
+							/>
+
+							<View style={styles.school}>
+								<Text style={{fontSize: height * .015}}>{profile.School}</Text>
+							</View>
 						</View>
 						
-						<School
-							name="school"
-							size={height * .025}
-							color={"#000"}
-						/>
-
-						<View style={styles.school}>
-							<Text style={{fontSize: height * .015}}>{profile.School}</Text>
-						</View>
+						
 					</View>
-					
-					
-				</View>
-			)}
+				)}
+			</SafeAreaView>
 
-		</SafeAreaView>
 
+		</ScrollView>
 	);
 }
 
