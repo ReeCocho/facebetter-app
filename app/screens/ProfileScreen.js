@@ -20,7 +20,8 @@ export default function ProfileScreen() {
 
 	const onEditProfilePressed = () => {
 		console.log("edit profile pressed");
-		navigation.navigate("EditProfileScreen");
+		// navigation.navigate("EditProfileScreen");
+
 	};
 
 	return (
@@ -72,7 +73,7 @@ export default function ProfileScreen() {
 								justifyContent: "flex-start",
 								width: widthPercentageToDP(80),
 							}}>
-								<Text style={{fontSize: height * .018, fontWeight: "bold"}}>{profile.Followers}</Text>
+								<Text style={{fontSize: height * .018, fontWeight: "bold"}}>{profile.Followers.length}</Text>
 								<Text style={{fontSize: height * .018}}> Followers</Text>
 							</View>
 
@@ -82,7 +83,7 @@ export default function ProfileScreen() {
 								justifyContent: "flex-start",
 								width: widthPercentageToDP(80),
 							}}>
-								<Text style={{fontSize: height * .018, fontWeight: "bold"}}>{profile.Following}</Text>
+								<Text style={{fontSize: height * .018, fontWeight: "bold"}}>{profile.Following.length}</Text>
 								<Text style={{fontSize: height * .018}}> Following</Text>
 							</View>					
 						</View>

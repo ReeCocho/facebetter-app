@@ -5,6 +5,7 @@ import CustomInput from "../components/CustomInput";
 import CustomButton from "../components/CustomButton";
 import { LinearGradient } from "expo-linear-gradient";
 import { signUp } from "../api/user.js";
+import { useNavigation } from "@react-navigation/native";
 
 export default function LoginScreen() {
 	const [firstName, setFirstName] = useState("");
@@ -15,6 +16,7 @@ export default function LoginScreen() {
 	const [work, setWork] = useState("");
 	const [email, setEmail] = useState("");
 	const { height } = useWindowDimensions();
+    const navigation = useNavigation();
 
 	const onCreateAccountPressed = async () => {
 		//check if firstname is entered
@@ -28,9 +30,9 @@ export default function LoginScreen() {
 		try {
 			const response = await signUp(username, password, email, firstName, lastName, school, work);
 			//account successfully created
+            console.log(response);
 			if (response.Error === null) {
-				//TODO: Navigate to Profile Page
-				console.warn("Account Created");
+                navigation.navigate("VerifyEmailScreen");
 			} else {
 				Alert.alert("Cannot Create Account", JSON.stringify(response.Error).replace(/['"]+/g, ""), [
 					{ text: "OK", onPress: () => console.log("OK Pressed") },

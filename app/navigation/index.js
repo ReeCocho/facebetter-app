@@ -7,6 +7,8 @@ import RegisterScreen from "../screens/RegisterScreen";
 import ProfileScreen from "../screens/ProfileScreen";
 import AppLoader from "../screens/AppLoader";
 import LoginStatusProvider from "../context/LoginStatusProvider";
+import ResetPasswordScreen from "../screens/ResetPasswordScreen";
+import VerifyEmailScreen from "../screens/VerifyEmailScreen";
 
 export default StackNavigator = () => {
 	const Stack = createNativeStackNavigator();
@@ -21,6 +23,7 @@ export default StackNavigator = () => {
 				{jwtToken !== null ? (
 					<>
 						<Stack.Screen name="ProfileScreen" component={ProfileScreen} />
+                        <Stack.Screen name="EditProfileScreen" component={ProfileScreen} />
 					</>
 				) : (
 					<>
@@ -30,6 +33,9 @@ export default StackNavigator = () => {
 							options={{ animationTypeForReplace: isSigningOut ? "pop" : "push" }}
 						/>
 						<Stack.Screen name="RegisterScreen" component={RegisterScreen} />
+                        <Stack.Screen name="ResetPasswordScreen" component={ResetPasswordScreen} />
+                        {/* <Stack.Screen name="VerifyEmailScreen" component={VerifyEmailScreen} /> */}
+                        <Stack.Screen name="VerifyEmailScreen" component={VerifyEmailScreen} />
 					</>
 				)}
 			</Stack.Navigator>
@@ -51,3 +57,4 @@ const styles = StyleSheet.create({
 		color: "black",
 	},
 });
+

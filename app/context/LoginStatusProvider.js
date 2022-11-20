@@ -12,19 +12,25 @@ export function LoginStatusProvider({ children }) {
 	const [profile, setProfile] = useState({});
 
 	useEffect(() => {
-		const tmp = async () => {
+		const retrieveAppStatus = async () => {
 			setIsLoading(true);
 			let token = null;
 			//comment this try catch block to remove auto login
-			try {
-				token = jwtDecode(await AsyncStorage.getItem("token"));
-			} catch (error) {
-				console.log("error fetching token ", error);
-			}
-
+			// try {
+            //     token = await AsyncStorage.getItem("token");
+			// } catch (error) {
+			// 	console.log("error fetching token ", error);
+			// }
 			if (token !== null) {
-				//todo check to see if it valid
-				const response = await fetchUser(token.userId);
+                let response = await validateJWT(token);
+                if (response.Error != null) {
+                    console.log("Error verifying jwt token", response.Error);
+					setjwtToken(null);
+					setIsLoading(false);
+					return;
+                }
+                token = jwtDecode(response);
+				response = await fetchUser(token.userId);
 				if (response.Error !== null) {
 					console.log("Error getting user profile", response.Error);
 					setjwtToken(null);
@@ -32,13 +38,16 @@ export function LoginStatusProvider({ children }) {
 					return;
 				}
 				const { Error, ...profile } = response;
-				console.log(profile);
 				setProfile(profile);
 				setjwtToken(token);
-			}
+			} else { 
+                setIsLoading(false);
+                setProfile(null);
+                setjwtToken(null);
+            }
 			setIsLoading(false);
 		};
-		tmp();
+		retrieveAppStatus();
 	}, []);
 
 	return (
