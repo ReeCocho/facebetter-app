@@ -3,6 +3,7 @@ import { CryptoDigestAlgorithm } from "expo-crypto";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const signIn = async (username, password) => {
+    //todo return something in the catch block
 	try {
 		let response = await fetch("http://localhost:8001/api/login", {
 			method: "POST",

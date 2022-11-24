@@ -9,6 +9,7 @@ import AppLoader from "../screens/AppLoader";
 import LoginStatusProvider from "../context/LoginStatusProvider";
 import ResetPasswordScreen from "../screens/ResetPasswordScreen";
 import VerifyEmailScreen from "../screens/VerifyEmailScreen";
+import MessagesScreen from "../screens/MessagesScreen";
 
 export default StackNavigator = () => {
 	const Stack = createNativeStackNavigator();
@@ -21,9 +22,10 @@ export default StackNavigator = () => {
 		<NavigationContainer>
 			<Stack.Navigator screenOptions={{ headerShown: false }}>
 				{jwtToken !== null ? (
-					<>
+                    <>
 						<Stack.Screen name="ProfileScreen" component={ProfileScreen} />
                         <Stack.Screen name="EditProfileScreen" component={ProfileScreen} />
+                        <Stack.Screen name="MessagesScreen" component={MessagesScreen} />
 					</>
 				) : (
 					<>
@@ -34,7 +36,6 @@ export default StackNavigator = () => {
 						/>
 						<Stack.Screen name="RegisterScreen" component={RegisterScreen} />
                         <Stack.Screen name="ResetPasswordScreen" component={ResetPasswordScreen} />
-                        {/* <Stack.Screen name="VerifyEmailScreen" component={VerifyEmailScreen} /> */}
                         <Stack.Screen name="VerifyEmailScreen" component={VerifyEmailScreen} />
 					</>
 				)}

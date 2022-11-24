@@ -14,6 +14,7 @@ export default function LoginScreen() {
 	const { setjwtToken, setProfile, ...loginContext } = useContext(LoginStatusProvider);
 	const onSendLoginLink = async () => {
         try {
+            //todo finish (check without server response)
             const response = await checkEmail(email);
         } catch (error) {
             

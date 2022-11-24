@@ -16,13 +16,19 @@ export function LoginStatusProvider({ children }) {
 			setIsLoading(true);
 			let token = null;
 			//comment this try catch block to remove auto login
-			// try {
-            //     token = await AsyncStorage.getItem("token");
-			// } catch (error) {
-			// 	console.log("error fetching token ", error);
-			// }
+			try {
+                token = await AsyncStorage.getItem("token");
+			} catch (error) {
+				console.log("error fetching token ", error);
+			}
 			if (token !== null) {
                 let response = await validateJWT(token);
+                if (response == undefined) {
+                    console.log("Did not receive response from jwt verify call");
+                    setjwtToken(null);
+					setIsLoading(false);
+					return;
+                }   
                 if (response.Error != null) {
                     console.log("Error verifying jwt token", response.Error);
 					setjwtToken(null);
