@@ -26,19 +26,19 @@ export default function LoginScreen() {
 			let response = await signIn(username, password);
 			// let response = await signIn("test01", "test");
 			if (response.Error !== null) {
-				Alert.alert(response.Error, "", [
-					{ text: "OK", onPress: () => console.log("OK Pressed") },
-				]);
+                console.log(response.Error)
+                if (response.Error === "Please verify your email account.") { 
+                    navigation.navigate("VerifyEmailScreen");
+                    return
+                }
+				Alert.alert(response.Error, "", [{ text: "OK", onPress: () => console.log("OK Pressed") }]);
 				return;
 			}
 			//get profile
 			token = await AsyncStorage.getItem("token");
 			response = await fetchUser(jwtDecode(token)["userId"]);
 			if (response.Error !== null) {
-				//todo: look into throwing error instead
-				Alert.alert("Something Went Wrong", "Please Try Again Later", [
-					{ text: "OK", onPress: () => console.log("OK Pressed") },
-				]);
+				Alert.alert(response.Error, "", [{ text: "OK", onPress: () => console.log("OK Pressed") }]);
 				console.log("Error getting user profile", response.Error);
 				return;
 			}
@@ -55,7 +55,7 @@ export default function LoginScreen() {
 	};
 
 	const onForgotPasswordPressed = () => {
-		console.warn("Forgot Password Pressed");
+		navigation.navigate("ResetPasswordScreen");
 	};
 
 	const onCreateNewAccountPressed = () => {

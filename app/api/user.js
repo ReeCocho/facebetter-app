@@ -3,6 +3,7 @@ import { CryptoDigestAlgorithm } from "expo-crypto";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const signIn = async (username, password) => {
+    //todo return something in the catch block
 	try {
 		let response = await fetch("http://localhost:8001/api/login", {
 			method: "POST",
@@ -96,4 +97,50 @@ export const editProfile = async (Id, firstName, lastName, school, work, jwt) =>
 	}
 };
 
-export const validateJWT = async (jwt) => {};
+export const validateJWT = async (jwt) => { //returns refreshed jwt token
+    if (jwt == null) { 
+        return null;
+    }
+    try {
+		let response = await fetch("http://localhost:8001/api/verifytoken", {
+			method: "POST",
+			headers: {
+				Accept: "application/json",
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({				
+				JwtToken: jwt
+			}),
+		});
+		response = await response.json();
+        if (response.Error != null) {
+            return response
+        }
+        const token = response["JwtToken"]["accessToken"];
+		await AsyncStorage.setItem("token", token);
+		return token;
+	} catch (error) {
+		console.log("error within validate JWT call ", error.message);
+	}
+};
+export const checkEmail = async (email) => { //returns refreshed id of email if found
+    try {
+		let response = await fetch("http://localhost:8001/api/checkemail", {
+			method: "POST",
+			headers: {
+				Accept: "application/json",
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({				
+				Email: email
+			}),
+		});
+		response = await response.json();
+        if (response.Error != null) {
+            return response
+        }
+        return response["_id"];
+	} catch (error) {
+		console.log("error within checkEmail call ", error.message);
+	}
+};
