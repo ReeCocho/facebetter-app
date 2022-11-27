@@ -9,9 +9,10 @@ import { moderateScale, scale } from "react-native-size-matters";
 import {widthPercentageToDP, heightPercentageToDP} from 'react-native-responsive-screen';
 import Work from "react-native-vector-icons/MaterialIcons";
 import School from "react-native-vector-icons/Ionicons";
+import Search from "react-native-vector-icons/Feather";
+import Messages from "react-native-vector-icons/Feather";
 import FollowersScreen from "./FollowersScreen";
 import FollowingScreen from "./FollowingScreen";
-import EditProfileScreen from "./EditProfileScreen";
 
 var height = Dimensions.get("window").height;
 var width = Dimensions.get("window").width;
@@ -28,7 +29,26 @@ export default function ProfileScreen() {
 	};
 
 	return (
-		<ScrollView>
+		<View>
+			<View style={{
+				flexDirection: "row", 
+				justifyContent: "space-between",
+				paddingHorizontal: width * .05,
+				paddingTop: height * .01}}>
+				<Messages
+					name="message-circle"
+					size={height * .045}
+					color={"#000"}
+					onPress={() => navigation.navigate("MessagesScreen")}
+				/>
+				<Search
+					name="search"
+					size={height * .045}
+					color={"#000"}
+					onPress={() => navigation.navigate("SearchScreen")}
+				/>
+			</View>
+
 			<SafeAreaView
 				contentContainerStyle={{
 					flexGrow: 1,
@@ -109,7 +129,7 @@ export default function ProfileScreen() {
 			</SafeAreaView>
 
 
-		</ScrollView>
+		</View>
 	);
 }
 

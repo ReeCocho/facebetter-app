@@ -1,12 +1,12 @@
 import React, { useState, useContext, useEffect } from "react";
 import { Dimensions, StyleSheet, View, Image, ScrollView, } from "react-native";
 import CustomInput from "../components/CustomInput";
-import ProfilePicture from "../assets/images/profilePic.jpg";
 import LoginStatusProvider from "../context/LoginStatusProvider";
 import CustomButton from "../components/CustomButton";
-import { useNavigation } from "@react-navigation/native";
-import editProfile from "../api/user";
+import { useNavigation, StackActions } from "@react-navigation/native";
+import { editProfile } from "../api/user";
 import * as ImagePicker from "expo-image-picker";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 
 var height = Dimensions.get("window").height;
@@ -14,40 +14,22 @@ var width = Dimensions.get("window").width;
 
 const EditProfileScreen = () => {
     const { profile, setProfile, setIsSigningOut, jwtToken, ...loginContext } = useContext(LoginStatusProvider);
-    const [firstName, setFirstName] = useState("");
+    const [firstName, setFirstName] = useState(profile.FirstName);
 	const [lastName, setLastName] = useState("");
 	const [school, setSchool] = useState("");
 	const [work, setWork] = useState("");
     const navigation = useNavigation();
-    let saveClicked = false;
+    const popAction = StackActions.pop(1);
 
-
-    // useEffect(() => {
-    //     (async () => {
-    //         console.log(saveClicked)
-    //         console.log("here");
-    //         if(saveClicked === true) {
-    //             console.log("here 2");
-    //             const res = await editProfile(profile.Id, firstName, lastName, school, work, jwtToken);
-            
-    //             if(res.err === null)
-    //                 navigation.navigate("ProfileScreen");
-    //         }
-
-    //     })();
-    // }, [saveClicked]);
 
     const onSaveEdits = () => {
-		console.log("save changes pressed" + " " + jwtToken);
-        //console.log("\n\n" + firstName + " " + lastName + " School: " + school + " Work: " + work + "\n\n")
 
-        // (async () => {
-        //     const Id = profile.Id;
-        //     const res = await editProfile("636da7d3f459ca05f325a0c9", firstName, lastName, school, work, jwtToken);
+        (async () => {
+            const token = await AsyncStorage.getItem("token");
+            const res = await editProfile(profile.Id, firstName, lastName, school, work, token);
             
-        //         if(res.err === null)
-        //             navigation.navigate("ProfileScreen");
-        // })();
+            navigation.dispatch(popAction);
+        })();
 	};
 
     const pickImage = async () => {

@@ -5,7 +5,7 @@ import { fetchUser, searchProfiles } from '../api/user';
 import Work from "react-native-vector-icons/MaterialIcons";
 import School from "react-native-vector-icons/Ionicons";
 import ChevronLeft from "react-native-vector-icons/Feather"
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, StackActions } from "@react-navigation/native";
 import {widthPercentageToDP, heightPercentageToDP} from 'react-native-responsive-screen';
 import SearchBar from "../components/SearchBar";
 import Search from "react-native-vector-icons/Feather"
@@ -18,25 +18,18 @@ const SearchScreen = () => {
     const navigation = useNavigation();
     const [query, setQuery] = useState("");
     const [queryProfiles, setQueryProfiles] = useState([]);
+    const popAction = StackActions.pop(1);
 
 
     useEffect(() => {
         (async () => {
-            console.log(query);
             const searchRes = await searchProfiles(query);
-            
-            console.log(searchRes);
-
-            console.log(searchRes.Results[0]._id)
 
             //console.log(searchRes);
 
             let resultProfiles = [];
             for(let i = 0; i<searchRes.Results.length; i++) {
-                console.log("in for " + searchRes.Results[i]._id);
-                
                 const res = await fetchUser(searchRes.Results[i]._id);
-                console.log(res);
                 resultProfiles.push(res);
             }
 
@@ -60,7 +53,7 @@ const SearchScreen = () => {
                         size={height *.04}
                         color={"#000"}
                         style={{marginTop: 18}}
-                        //onPress={navigation.navigate("ProfileScreen")}
+                        onPress={() => navigation.dispatch(popAction)}
                     />
 
                     <SearchBar onChangeText={setQuery} value={query} placeholder="Search"/>

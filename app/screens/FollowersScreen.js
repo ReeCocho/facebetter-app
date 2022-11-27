@@ -5,7 +5,7 @@ import { fetchUser } from '../api/user';
 import Work from "react-native-vector-icons/MaterialIcons";
 import School from "react-native-vector-icons/Ionicons";
 import ChevronLeft from "react-native-vector-icons/Feather"
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, StackActions } from "@react-navigation/native";
 import {widthPercentageToDP, heightPercentageToDP} from 'react-native-responsive-screen';
 import ViewProfileScreen from './ViewProfileScreen';
 
@@ -16,6 +16,7 @@ const FollowersScreen = () => {
     const { profile, setProfile, setIsSigningOut, ...loginContext } = useContext(LoginStatusProvider);
     const [ followers, setFollowers ] = useState([]);
     const navigation = useNavigation();
+    const popAction = StackActions.pop(1);
         
     useEffect(() => {
         (async () => {
@@ -45,7 +46,7 @@ const FollowersScreen = () => {
                         name="chevron-left"
                         size={height *.04}
                         color={"#000"}
-                        //onPress={navigation.navigate("ProfileScreen")}
+                        onPress={() => navigation.dispatch(popAction)}
                     />
 
                     <Text style={{marginLeft: width*.3, marginTop: 5, fontSize: height*.025}}>Followers</Text>

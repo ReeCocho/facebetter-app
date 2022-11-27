@@ -7,6 +7,7 @@ import { scale } from "react-native-size-matters";
 import { widthPercentageToDP } from 'react-native-responsive-screen';
 import Work from "react-native-vector-icons/MaterialIcons";
 import School from "react-native-vector-icons/Ionicons";
+import LoginStatusProvider from "../context/LoginStatusProvider";
 
 var height = Dimensions.get("window").height;
 var width = Dimensions.get("window").width;
@@ -14,10 +15,11 @@ var width = Dimensions.get("window").width;
 const ViewProfileScreen = ({ route }) => {
     const { id } = route.params;
     const [profile, setProfile] = useState([]);
+    const { myProfile, setMyProfile, setIsSigningOut, ...loginContext } = useContext(LoginStatusProvider);
     const [followers, setFollowers] = useState([]);
     const [following, setFollowing] = useState([]);
     
-
+    
 
     useEffect(() => {
         (async () => {
@@ -29,7 +31,6 @@ const ViewProfileScreen = ({ route }) => {
     }, []);
 
     
-
     return(
         <SafeAreaView
         contentContainerStyle={{
