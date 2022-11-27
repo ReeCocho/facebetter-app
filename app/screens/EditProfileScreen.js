@@ -1,12 +1,12 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { Dimensions, StyleSheet, View, Image, ScrollView, } from "react-native";
 import CustomInput from "../components/CustomInput";
-import ProfilePicture from "../assets/images/profilePic.jpg";
 import LoginStatusProvider from "../context/LoginStatusProvider";
 import CustomButton from "../components/CustomButton";
-import { useNavigation } from "@react-navigation/native";
-import editProfile from "../api/user";
+import { useNavigation, StackActions } from "@react-navigation/native";
+import { editProfile } from "../api/user";
 import * as ImagePicker from "expo-image-picker";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 
 var height = Dimensions.get("window").height;
@@ -14,19 +14,22 @@ var width = Dimensions.get("window").width;
 
 const EditProfileScreen = () => {
     const { profile, setProfile, setIsSigningOut, jwtToken, ...loginContext } = useContext(LoginStatusProvider);
-    const [firstName, setFirstName] = useState("");
+    const [firstName, setFirstName] = useState(profile.FirstName);
 	const [lastName, setLastName] = useState("");
 	const [school, setSchool] = useState("");
 	const [work, setWork] = useState("");
     const navigation = useNavigation();
+    const popAction = StackActions.pop(1);
+
 
     const onSaveEdits = () => {
-		console.log("save changes pressed");
 
-        //this might need to be fixed
-
-        editProfile(profile.Id, firstName, lastName, school, work, jwtToken);
-		navigation.navigate("ProfileScreen");
+        (async () => {
+            const token = await AsyncStorage.getItem("token");
+            const res = await editProfile(profile.Id, firstName, lastName, school, work, token);
+            
+            navigation.dispatch(popAction);
+        })();
 	};
 
     const pickImage = async () => {
@@ -50,16 +53,16 @@ const EditProfileScreen = () => {
                 justifyContent: "space-between",
                 flexDirection: "column",
             }}
-            style={{ paddingBottom: 20, backgroundColor: "#D9DDD9" }}
+            style={{ paddingBottom: 20,}}
         >
             <View style={styles.root}>
-                <Image source={ProfilePicture} style={styles.profilePic} />
-                <CustomInput onChangeText={setFirstName} value={firstName} placeholder={profile.firstName} />
-                <CustomInput onChangeText={setLastName} value={lastName} placeholder={profile.lastName} />
+                <Image source={{uri: profile.ProfilePicture}} style={styles.profilePic} />
+                <CustomInput onChangeText={setFirstName} value={firstName} placeholder={profile.FirstName} />
+                <CustomInput onChangeText={setLastName} value={lastName} placeholder={profile.LastName} />
 
-                <CustomInput onChangeText={setSchool} value={school} placeholder={profile.school} />
+                <CustomInput onChangeText={setSchool} value={school} placeholder={profile.School} />
 
-                <CustomInput onChangeText={setWork} value={work} placeholder={profile.work} />
+                <CustomInput onChangeText={setWork} value={work} placeholder={profile.Work} />
 
                 <CustomButton text={"Save Changes"} onPress={onSaveEdits} />
             </View>
@@ -78,6 +81,7 @@ const styles = StyleSheet.create({
     },
     profilePicContainer: {
         flex: 1,
+        alignItems: "center"
 	},
 	profilePic: {
 		height: height / 5,
