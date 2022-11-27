@@ -67,7 +67,16 @@ const SearchScreen = () => {
                 </View>
 
                 {queryProfiles.map((item) => (
-                        <View key={item.Id}  style={styles.itemContainer}>
+                        <View 
+                            key={item.Id}  
+                            style={styles.itemContainer}
+                            onStartShouldSetResponder={() => 
+                                {console.log(item.Id)
+                                navigation.navigate("ViewProfileScreen", {
+                                id: item.Id
+                            })}}>
+                            
+                            
                             <View style={[styles.profilePicContainer]}>
                                 <Image
                                     source={{uri: item.ProfilePicture}}
