@@ -9,6 +9,9 @@ import { moderateScale, scale } from "react-native-size-matters";
 import {widthPercentageToDP, heightPercentageToDP} from 'react-native-responsive-screen';
 import Work from "react-native-vector-icons/MaterialIcons";
 import School from "react-native-vector-icons/Ionicons";
+import FollowersScreen from "./FollowersScreen";
+import FollowingScreen from "./FollowingScreen";
+import EditProfileScreen from "./EditProfileScreen";
 
 var height = Dimensions.get("window").height;
 var width = Dimensions.get("window").width;
@@ -20,7 +23,7 @@ export default function ProfileScreen() {
 
 	const onEditProfilePressed = () => {
 		console.log("edit profile pressed");
-		// navigation.navigate("EditProfileScreen");
+		navigation.navigate("EditProfileScreen");
 
 	};
 
@@ -32,88 +35,75 @@ export default function ProfileScreen() {
 					justifyContent: "space-between",
 					flexDirection: "column",
 				}}
-				style={{height: height / 4.3, borderBottomWidth: "2px", borderBottomColor: "black"}}
+				style={{height: height}}
 			>
 				{profile && (
-					<View style={{flex: 1}}>
+					<View style={styles.root}>
 						<View style={[styles.profilePicContainer]}>
 							<Image
-								source={ProfilePicture}
+								source={{uri: profile.ProfilePicture}}
 								style={[styles.profilePic]}
 								resizeMode="contain"
 							/>
 						</View>
 
-
-
-						<View style={[styles.profileNamesContainer]}>
-							<View style={styles.nameContainer}>
-								<Text style={styles.name}>
-									{profile.FirstName + " " + profile.LastName}
-								</Text>
-							</View>
-
-							<View style={styles.userNameContainer}>
-								<Text>{"@" + profile.Id}</Text>
-							</View>
-
-							<View >
-								<EditProfileButton
-									text={"Edit Profile"}
-									onPress={onEditProfilePressed}
-								/>
-							</View>
+				
+						<View style={styles.nameContainer}>
+							<Text style={styles.name}>
+								{profile.FirstName + " " + profile.LastName}
+							</Text>
 						</View>
 
-						
-						<View style={styles.followInfoContainer}>
-							<View style={{
-								position: "relative",
-								flexDirection: "row",
-								justifyContent: "flex-start",
-								width: widthPercentageToDP(80),
-							}}>
-								<Text style={{fontSize: height * .018, fontWeight: "bold"}}>{profile.Followers.length}</Text>
-								<Text style={{fontSize: height * .018}}> Followers</Text>
-							</View>
-
-							<View style={{
-								position: "relative",
-								flexDirection: "row",
-								justifyContent: "flex-start",
-								width: widthPercentageToDP(80),
-							}}>
-								<Text style={{fontSize: height * .018, fontWeight: "bold"}}>{profile.Following.length}</Text>
-								<Text style={{fontSize: height * .018}}> Following</Text>
-							</View>					
+						<View style={styles.userNameContainer}>
+							<Text>{"@" + profile.Id}</Text>
 						</View>
 
 
+					
 						
-						<View style={styles.workSchoolContainer}>
-							
+						<View style={styles.workContainer}>	
 							<Work
 								name="work"
-								size={height * .025}
+								size={height * .035}
 								color={"#000"}
 							/> 
 
 							<View style={styles.work}>
-								<Text style={{fontSize: height * .015}}>{profile.Work}</Text>
+								<Text style={{fontSize: height * .02, marginLeft: scale(7)}}>{profile.Work}</Text>
 							</View>
-							
+						</View>
+
+						<View style={styles.schoolContainer}>
 							<School
 								name="school"
-								size={height * .025}
+								size={height * .035}
 								color={"#000"}
 							/>
 
-							<View style={styles.school}>
-								<Text style={{fontSize: height * .015}}>{profile.School}</Text>
-							</View>
+							<Text style={{fontSize: height * .02, marginLeft: scale(7)}}>{profile.School}</Text>
 						</View>
-						
-						
+
+
+						<View 
+							style={styles.followersContainer}
+							onStartShouldSetResponder={() => navigation.navigate(FollowersScreen)}>
+								<Text style={{fontSize: height * .018, fontWeight: "bold"}}>{profile.Followers.length}</Text>
+								<Text style={{fontSize: height * .018}}> Followers</Text>
+						</View>
+
+						<View 
+							style={styles.followingContainer}
+							onStartShouldSetResponder={() => navigation.navigate(FollowingScreen)}>
+								<Text style={{fontSize: height * .018, fontWeight: "bold"}}>{profile.Following.length}</Text>
+								<Text style={{fontSize: height * .018}}> Following</Text>
+						</View>
+
+						<View >
+							<EditProfileButton
+								text={"Edit Profile"}
+								onPress={onEditProfilePressed}
+							/>
+						</View>
 					</View>
 				)}
 			</SafeAreaView>
@@ -127,85 +117,54 @@ const styles = StyleSheet.create({
 	root: {
 		flex: 1,
 		alignItems: "center",
-		padding: 20,
+		flexDirection: "column"
 	},
 	profilePicContainer: {
-		left: 10,
-		top: 12,
-		// flex: 1,
-		// height: 100,
-		// width: 100,
-		// borderRadius: 50,
+		marginTop: 30,
+		height: height/4,
+		width: height/4,
+		borderRadius: height/2,
+		backgroundColor: "gray"
 	},
 	profilePic: {
-		height: height / 9,
-		width: height / 9,
-		borderRadius: height / 4.5,
+		height: height / 4,
+		width: height / 4,
+		borderRadius: height / 2,
 	},
 	profileNamesContainer: {
-		// flex: 1,
+		alignItems: "center",
 		width: "70%",
-		height: height / 9.5,
-		marginLeft: width / 3.5,
-		marginTop: scale(-70),
+		marginTop: scale(15),
 		position: "relative",
 	},
 	nameContainer: {
-		left: 10,
-		top: 10,
+		marginTop: scale(20),
+		alignItems: "center",
+		width: widthPercentageToDP(100)
 	},
 	name: {
 		fontSize: height * .03,
 		fontWeight: "bold",
 	},
 	userNameContainer: {
-		left: 10,
-		top: 10,
+		marginTop: scale(10)
 	},
-	followInfoContainer: {
-		width: widthPercentageToDP(80),
-		flex: .3,
-		flexDirection: "column",
-		justifyContent: "space-between",
-		alignItems: "flex-start",
-		left: 6,
-		top: 50
-	},
-	workSchoolContainer: {
-		position: "relative",
-		flex: .29,
+	workContainer: {
 		flexDirection: "row",
-		justifyContent: "space-between",
-		alignItems: "flex-start",
-		height: heightPercentageToDP(0),
-		width: widthPercentageToDP(98),
-		left: 6,
-		top: -15
-	},
-	work: {
-		left: -19,
-		marginTop: 4
-	},
-	school: {
-		left: -18,
-		marginTop: 4
-	},
-	messagesContainer: {
-		backgroundColor: "orange",
-		top: 70,
 		alignItems: "center",
-		alignSelf: "center",
-		width: widthPercentageToDP(90)
+		marginTop: scale(10)
 	},
-	textLineView: {
-		justifyContent: "center",
-		alignItems: "center",
+	schoolContainer: {
 		flexDirection: "row",
-		height: height * .5
+		alignItems: "center",
+		marginTop: scale(10)
 	},
-	line: {
-		flex: 1,
-		borderBottomColor: "black",
-		borderBottomWidth: 2,
+	followersContainer: {
+		marginTop: scale(10),
+		flexDirection: "row"
 	},
+	followingContainer: {
+		marginTop: scale(10),
+		flexDirection: "row"
+	}
 });

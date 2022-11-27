@@ -144,3 +144,21 @@ export const checkEmail = async (email) => { //returns refreshed id of email if 
 		console.log("error within checkEmail call ", error.message);
 	}
 };
+export const searchProfiles = async (query) => {
+	try {
+		let response = await fetch("http://localhost:8001/api/searchprofiles", {
+			method: "POST",
+			headers: {
+				Accept: "applicaation/json",
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({
+				search: query
+			}),
+		});
+		response = await response.json();
+		return response;
+	} catch (error) {
+		console.log("error within searchProfileData call ", error.message);
+	}
+};

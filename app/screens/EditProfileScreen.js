@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { Dimensions, StyleSheet, View, Image, ScrollView, } from "react-native";
 import CustomInput from "../components/CustomInput";
 import ProfilePicture from "../assets/images/profilePic.jpg";
@@ -19,14 +19,35 @@ const EditProfileScreen = () => {
 	const [school, setSchool] = useState("");
 	const [work, setWork] = useState("");
     const navigation = useNavigation();
+    let saveClicked = false;
+
+
+    // useEffect(() => {
+    //     (async () => {
+    //         console.log(saveClicked)
+    //         console.log("here");
+    //         if(saveClicked === true) {
+    //             console.log("here 2");
+    //             const res = await editProfile(profile.Id, firstName, lastName, school, work, jwtToken);
+            
+    //             if(res.err === null)
+    //                 navigation.navigate("ProfileScreen");
+    //         }
+
+    //     })();
+    // }, [saveClicked]);
 
     const onSaveEdits = () => {
-		console.log("save changes pressed");
+		console.log("save changes pressed" + " " + jwtToken);
+        //console.log("\n\n" + firstName + " " + lastName + " School: " + school + " Work: " + work + "\n\n")
 
-        //this might need to be fixed
-
-        editProfile(profile.Id, firstName, lastName, school, work, jwtToken);
-		navigation.navigate("ProfileScreen");
+        // (async () => {
+        //     const Id = profile.Id;
+        //     const res = await editProfile("636da7d3f459ca05f325a0c9", firstName, lastName, school, work, jwtToken);
+            
+        //         if(res.err === null)
+        //             navigation.navigate("ProfileScreen");
+        // })();
 	};
 
     const pickImage = async () => {
@@ -50,16 +71,16 @@ const EditProfileScreen = () => {
                 justifyContent: "space-between",
                 flexDirection: "column",
             }}
-            style={{ paddingBottom: 20, backgroundColor: "#D9DDD9" }}
+            style={{ paddingBottom: 20,}}
         >
             <View style={styles.root}>
-                <Image source={ProfilePicture} style={styles.profilePic} />
-                <CustomInput onChangeText={setFirstName} value={firstName} placeholder={profile.firstName} />
-                <CustomInput onChangeText={setLastName} value={lastName} placeholder={profile.lastName} />
+                <Image source={{uri: profile.ProfilePicture}} style={styles.profilePic} />
+                <CustomInput onChangeText={setFirstName} value={firstName} placeholder={profile.FirstName} />
+                <CustomInput onChangeText={setLastName} value={lastName} placeholder={profile.LastName} />
 
-                <CustomInput onChangeText={setSchool} value={school} placeholder={profile.school} />
+                <CustomInput onChangeText={setSchool} value={school} placeholder={profile.School} />
 
-                <CustomInput onChangeText={setWork} value={work} placeholder={profile.work} />
+                <CustomInput onChangeText={setWork} value={work} placeholder={profile.Work} />
 
                 <CustomButton text={"Save Changes"} onPress={onSaveEdits} />
             </View>
@@ -78,6 +99,7 @@ const styles = StyleSheet.create({
     },
     profilePicContainer: {
         flex: 1,
+        alignItems: "center"
 	},
 	profilePic: {
 		height: height / 5,

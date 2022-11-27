@@ -10,6 +10,11 @@ import LoginStatusProvider from "../context/LoginStatusProvider";
 import ResetPasswordScreen from "../screens/ResetPasswordScreen";
 import VerifyEmailScreen from "../screens/VerifyEmailScreen";
 import MessagesScreen from "../screens/MessagesScreen";
+import FollowersScreen from "../screens/FollowersScreen";
+import FollowingScreen from "../screens/FollowingScreen";
+import SearchScreen from "../screens/SearchScreen";
+import EditProfileScreen from "../screens/EditProfileScreen";
+import ViewProfileScreen from "../screens/ViewProfileScreen";
 
 export default StackNavigator = () => {
 	const Stack = createNativeStackNavigator();
@@ -24,8 +29,15 @@ export default StackNavigator = () => {
 				{jwtToken !== null ? (
                     <>
 						<Stack.Screen name="ProfileScreen" component={ProfileScreen} />
-                        <Stack.Screen name="EditProfileScreen" component={ProfileScreen} />
+                        <Stack.Screen name="EditProfileScreen" component={EditProfileScreen} />
                         <Stack.Screen name="MessagesScreen" component={MessagesScreen} />
+						<Stack.Screen name="FollowersScreen" component={FollowersScreen} />
+						<Stack.Screen name="FollowingScreen" component={FollowingScreen} />
+						<Stack.Screen name="SearchScreen" component={SearchScreen} />
+						<Stack.Screen 
+							name="ViewProfileScreen" 
+							component={ViewProfileScreen} 
+							options={{title: "UserId"}}/>
 					</>
 				) : (
 					<>
