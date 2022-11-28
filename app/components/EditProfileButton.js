@@ -38,15 +38,15 @@ const CustomButton = ({
 const styles = StyleSheet.create({
 	container: {
 		width: width * .62,
-		height: height * .028,
-		padding: 3,
+		height: height * .035,
+		padding: 6,
 		borderRadius: 5,
 		marginLeft: 9,
 		top: 18,
 		alignItems: "center"
 	},
 	container_PRIMARY: {
-		backgroundColor: "#1757B8",
+		backgroundColor: "#2F97C9",
 	},
 	container_SECONDARY: {
 		borderColor: "#1757B8",

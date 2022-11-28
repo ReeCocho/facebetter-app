@@ -35,15 +35,15 @@ const FollowingScreen = () => {
         <View styles={styles.container}>
             <ScrollView>
                 
-                <View style={{flexDirection: "row"}}>
+                <View style={{flexDirection: "row", borderBottomColor: "gray", borderBottomWidth: "2px"}}>
                     <ChevronLeft
                         name="chevron-left"
                         size={height *.04}
-                        color={"#000"}
+                        color={"#2F97C9"}
                         onPress={() => navigation.dispatch(popAction)}
                     />
 
-                    <Text style={{marginLeft: width*.3, marginTop: 5, fontSize: height*.025}}>Following</Text>
+                    <Text style={{marginLeft: width*.3, marginTop: 5, fontSize: height*.025, color: "#2F97C9"}}>Following</Text>
 
                 </View>
 
@@ -68,7 +68,7 @@ const FollowingScreen = () => {
                             
                             <View>
                                 <Text style={styles.name}>{item.FirstName + " " + item.LastName}</Text>
-                                <Text style={styles.id}>{"@" + item.Id}</Text>
+                                <Text style={styles.id}>{"@" + item.Login}</Text>
 
                                 <View style={styles.workSchoolContainer}>
 
@@ -117,9 +117,7 @@ const styles = StyleSheet.create({
         padding: 10,
         //backgroundColor: "pink",
         fontSize: 24,
-        borderTopColor: "black",
-        borderTopWidth: "2px",
-        borderBottomColor: "black",
+        borderBottomColor: "gray",
         borderBottomWidth: "2px",
         flexDirection: "row",
         alignItems: "flex-start"

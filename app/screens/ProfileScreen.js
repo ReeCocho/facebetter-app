@@ -21,7 +21,7 @@ var width = Dimensions.get("window").width;
 export default function ProfileScreen() {
 	const [image, setImage] = useState(null);
 	const navigation = useNavigation();
-	const { profile, setProfile, setIsSigningOut, ...loginContext } = useContext(LoginStatusProvider);
+	const { profile, setjwtToken, setIsSigningOut, ...loginContext } = useContext(LoginStatusProvider);
 
 	const onEditProfilePressed = () => {
 		console.log("edit profile pressed");
@@ -31,6 +31,8 @@ export default function ProfileScreen() {
 
 	const onLogOutPressed = () => {
 		console.log("log out button pressed");
+		setIsSigningOut(true);
+		setjwtToken(null);
 	};
 
 	return (
@@ -44,13 +46,13 @@ export default function ProfileScreen() {
 				<LogOut
 					name="log-out"
 					size={height * .045}
-					color={"#000"}
+					color={"#2F97C9"}
 					onPress={onLogOutPressed}
 				/>
 				<Search
 					name="search"
 					size={height * .045}
-					color={"#000"}
+					color={"#2F97C9"}
 					onPress={() => navigation.navigate("SearchScreen")}
 				/>
 			</View>
@@ -81,7 +83,7 @@ export default function ProfileScreen() {
 						</View>
 
 						<View style={styles.userNameContainer}>
-							<Text>{"@" + profile.Id}</Text>
+							<Text style={{fontSize: height * .02}}>{"@" + profile.Login}</Text>
 						</View>
 
 
@@ -124,10 +126,12 @@ export default function ProfileScreen() {
 								<Text style={{fontSize: height * .018}}> Following</Text>
 						</View>
 
+					
+
 						<View >
 							<EditProfileButton
 								text={"Edit Profile"}
-								onPress={onEditProfilePressed}
+								onPress={() => navigation.navigate("EditProfileScreen")}
 							/>
 						</View>
 
@@ -135,11 +139,12 @@ export default function ProfileScreen() {
 							<Messages
 								name="message-circle"
 								size={height * .065}
-								color={"#000"}
+								color={"#2F97C9"}
 								onPress={() => navigation.navigate("MessagesScreen")}
 								style={styles.messagesButton}
 							/>
 						</View>
+						
 					</View>
 				)}
 			</SafeAreaView>

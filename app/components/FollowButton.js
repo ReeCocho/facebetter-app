@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
 		borderRadius: 5,
 	},
 	container_PRIMARY: {
-		backgroundColor: "#1757B8",
+		backgroundColor: "#2F97C9",
 	},
 	container_SECONDARY: {
 		borderColor: "#1757B8",

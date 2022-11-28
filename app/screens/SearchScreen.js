@@ -47,11 +47,11 @@ const SearchScreen = () => {
     return (
         <View styles={styles.container}>
             <ScrollView>
-                <View style={{flexDirection: "row"}}>
+                <View style={{flexDirection: "row", borderBottomColor: "gray", borderBottomWidth: "2px"}}>
                     <ChevronLeft
                         name="chevron-left"
                         size={height *.04}
-                        color={"#000"}
+                        color={"#2F97C9"}
                         style={{marginTop: 18}}
                         onPress={() => navigation.dispatch(popAction)}
                     />
@@ -81,7 +81,7 @@ const SearchScreen = () => {
                             
                             <View>
                                 <Text style={styles.name}>{item.FirstName + " " + item.LastName}</Text>
-                                <Text style={styles.id}>{"@" + item.Id}</Text>
+                                <Text style={styles.id}>{"@" + item.Login}</Text>
 
                                 <View style={styles.workSchoolContainer}>
 
@@ -130,9 +130,7 @@ const styles = StyleSheet.create({
         padding: 10,
         //backgroundColor: "pink",
         fontSize: 24,
-        borderTopColor: "black",
-        borderTopWidth: "2px",
-        borderBottomColor: "black",
+        borderBottomColor: "gray",
         borderBottomWidth: "2px",
         flexDirection: "row",
         alignItems: "flex-start"
