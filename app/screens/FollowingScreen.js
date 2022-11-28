@@ -26,12 +26,9 @@ const FollowingScreen = () => {
                 followingProfiles.push(res);
             }
 
-            //console.log(followerProfiles);
             setFollowing(followingProfiles);
         })();
     }, []);
-
-    //console.log("\n\n\n the followers and following array \n\n" + following[2].FirstName+ " " + followers[2].FirstName);
 
 
     return (
@@ -57,7 +54,8 @@ const FollowingScreen = () => {
                             onStartShouldSetResponder={() => 
                                 {console.log(item.Id)
                                 navigation.navigate("ViewProfileScreen", {
-                                id: item.Id
+                                id: item.Id,
+                                myProfile: profile
                         })}}>
                             
                             <View style={[styles.profilePicContainer]}>

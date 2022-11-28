@@ -17,19 +17,17 @@ const FollowersScreen = () => {
     const [ followers, setFollowers ] = useState([]);
     const navigation = useNavigation();
     const popAction = StackActions.pop(1);
-        
+
     useEffect(() => {
         (async () => {
             let followerProfiles = [];
             for(const id of profile.Followers) {
-                console.log(id);
                 
                 const res = await fetchUser(id);
 
                 followerProfiles.push(res);
             }
 
-            //console.log(followerProfiles);
             setFollowers(followerProfiles);
         })();
     }, []);
@@ -60,7 +58,8 @@ const FollowersScreen = () => {
                             onStartShouldSetResponder={() => 
                                 {console.log(item.Id)
                                 navigation.navigate("ViewProfileScreen", {
-                                id: item.Id
+                                id: item.Id,
+                                myProfile: profile
                             })}}>
                             
                             <View style={[styles.profilePicContainer]}>
