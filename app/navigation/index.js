@@ -9,12 +9,13 @@ import AppLoader from "../screens/AppLoader";
 import LoginStatusProvider from "../context/LoginStatusProvider";
 import ResetPasswordScreen from "../screens/ResetPasswordScreen";
 import VerifyEmailScreen from "../screens/VerifyEmailScreen";
-import MessagesScreen from "../screens/MessagesScreen";
 import FollowersScreen from "../screens/FollowersScreen";
 import FollowingScreen from "../screens/FollowingScreen";
 import SearchScreen from "../screens/SearchScreen";
 import EditProfileScreen from "../screens/EditProfileScreen";
 import ViewProfileScreen from "../screens/ViewProfileScreen";
+import MessagesScreen from "../screens/MessagesScreen";
+import ChannelScreen from "../screens/ChannelScreen";
 
 export default StackNavigator = () => {
 	const Stack = createNativeStackNavigator();
@@ -22,22 +23,26 @@ export default StackNavigator = () => {
 	if (isLoading) {
 		return <AppLoader />;
 	}
+    //todo create loading indicator, get receive messages working, update the preview of convo 
+    
 
 	return (
 		<NavigationContainer>
 			<Stack.Navigator screenOptions={{ headerShown: false }}>
 				{jwtToken !== null ? (
-                    <>
+					<>
 						<Stack.Screen name="ProfileScreen" component={ProfileScreen} />
-                        <Stack.Screen name="EditProfileScreen" component={EditProfileScreen} />
-                        <Stack.Screen name="MessagesScreen" component={MessagesScreen} />
+						<Stack.Screen name="EditProfileScreen" component={EditProfileScreen} />
 						<Stack.Screen name="FollowersScreen" component={FollowersScreen} />
 						<Stack.Screen name="FollowingScreen" component={FollowingScreen} />
 						<Stack.Screen name="SearchScreen" component={SearchScreen} />
-						<Stack.Screen 
-							name="ViewProfileScreen" 
-							component={ViewProfileScreen} 
-							options={{title: "UserId"}}/>
+						<Stack.Screen
+							name="ViewProfileScreen"
+							component={ViewProfileScreen}
+							options={{ title: "UserId" }}
+						/>
+                        <Stack.Screen name="MessagesScreen" component={MessagesScreen} options={{headerShown: true}}/>
+                        <Stack.Screen name="ChannelScreen" component={ChannelScreen} options={{headerShown: true}}/>
 					</>
 				) : (
 					<>
@@ -47,8 +52,8 @@ export default StackNavigator = () => {
 							options={{ animationTypeForReplace: isSigningOut ? "pop" : "push" }}
 						/>
 						<Stack.Screen name="RegisterScreen" component={RegisterScreen} />
-                        <Stack.Screen name="ResetPasswordScreen" component={ResetPasswordScreen} />
-                        <Stack.Screen name="VerifyEmailScreen" component={VerifyEmailScreen} />
+						<Stack.Screen name="ResetPasswordScreen" component={ResetPasswordScreen} />
+						<Stack.Screen name="VerifyEmailScreen" component={VerifyEmailScreen} />
 					</>
 				)}
 			</Stack.Navigator>
@@ -70,4 +75,3 @@ const styles = StyleSheet.create({
 		color: "black",
 	},
 });
-

@@ -2,13 +2,16 @@ import { SafeAreaView, StyleSheet, Button, Text, View } from "react-native";
 import React from "react";
 import StackNavigator from "./app/navigation/index.js";
 import { LoginStatusProvider } from "./app/context/LoginStatusProvider";
+import { ChannelsStatusProvider } from "./app/context/ChannelsStatusProvider";
 
 const App = () => {
 	return (
 		<LoginStatusProvider>
-			<SafeAreaView style={styles.root}>
-				<StackNavigator />
-			</SafeAreaView>
+			<ChannelsStatusProvider>
+				<SafeAreaView style={styles.root}>
+					<StackNavigator />
+				</SafeAreaView>
+			</ChannelsStatusProvider>
 		</LoginStatusProvider>
 	);
 };
