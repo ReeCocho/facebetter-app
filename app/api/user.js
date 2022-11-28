@@ -167,12 +167,6 @@ export const searchProfiles = async (query) => {
 };
 export const follow = async (id, toFollowId, jwtToken) => {
 	try {
-		console.log("\n\nMy Id=  ")
-		console.log(id);
-		console.log("\n\nto follow id=  ")
-		console.log(toFollowId);
-		console.log("\n\nMy jwt token=  ")
-		console.log(jwtToken);
 		let response = await fetch(buildPath("api/follow"), {
 			method: "POST",
 			headers: {
@@ -209,5 +203,24 @@ export const unfollow = async (id, toUnfollowId, jwtToken) => {
 		return response;
 	} catch (error) {
 		console.log("error within searchProfileData call ", error.message);
+	}
+};
+export const updateProfilePic = async (id, FileUrl) => {
+	try {
+		let response = await fetch(buildPath("api/updateprofilepic"), {
+			method: "POST",
+			headers: {
+				Accept: "applicaation/json",
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({
+				_id: id,
+				FileUrl: FileUrl
+			}),
+		});
+		response = await response.json();
+		return response;
+	} catch (error) {
+		console.log("error within updateProfilePic call ", error.message);
 	}
 };

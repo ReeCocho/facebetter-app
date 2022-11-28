@@ -60,8 +60,6 @@ const ViewProfileScreen = ({ route }) => {
         console.log("follow button pressed");
 
         if(isFollowing) {
-
-
             (async () => {
                 const token = await AsyncStorage.getItem("token");
                 await unfollow(myProfile.Id, id, token);
@@ -96,7 +94,7 @@ const ViewProfileScreen = ({ route }) => {
                     <ChevronLeft
                         name="chevron-left"
                         size={height *.04}
-                        color={"#000"}
+                        color={"#2F97C9"}
                         onPress={() => navigation.dispatch(popAction)}
                     />
         </View>
@@ -118,7 +116,7 @@ const ViewProfileScreen = ({ route }) => {
                 </View>
 
                 <View style={styles.userNameContainer}>
-                    <Text>{"@" + profile.Id}</Text>
+                    <Text style={{fontSize: height * .02}}>{"@" + profile.Login}</Text>
                 </View>
 
 

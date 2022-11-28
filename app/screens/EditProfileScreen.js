@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
-import { Dimensions, StyleSheet, View, Image, ScrollView, } from "react-native";
+import { Dimensions, StyleSheet, View, Image, ScrollView, Text} from "react-native";
 import CustomInput from "../components/CustomInput";
 import LoginStatusProvider from "../context/LoginStatusProvider";
 import CustomButton from "../components/CustomButton";
@@ -7,14 +7,14 @@ import { useNavigation, StackActions } from "@react-navigation/native";
 import { editProfile } from "../api/user";
 import * as ImagePicker from "expo-image-picker";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
+import ChevronLeft from "react-native-vector-icons/Feather";
 
 var height = Dimensions.get("window").height;
 var width = Dimensions.get("window").width;
 
 const EditProfileScreen = () => {
     const { profile, setProfile, setIsSigningOut, jwtToken, ...loginContext } = useContext(LoginStatusProvider);
-    const [firstName, setFirstName] = useState(profile.FirstName);
+    const [firstName, setFirstName] = useState("");
 	const [lastName, setLastName] = useState("");
 	const [school, setSchool] = useState("");
 	const [work, setWork] = useState("");
@@ -32,19 +32,6 @@ const EditProfileScreen = () => {
         })();
 	};
 
-    const pickImage = async () => {
-		// No permissions request is necessary for launching the image library
-		let result = await ImagePicker.launchImageLibraryAsync({
-			mediaTypes: ImagePicker.MediaTypeOptions.All,
-			allowsEditing: true,
-			aspect: [4, 3],
-			quality: 1,
-		});
-
-		if (!result.cancelled) {
-			setImage(result.uri);
-		}
-	};
 
     return(
         <ScrollView
@@ -55,8 +42,23 @@ const EditProfileScreen = () => {
             }}
             style={{ paddingBottom: 20,}}
         >
+            <View style={{flexDirection: "row", borderBottomColor: "gray", borderBottomWidth: "2px"}}>
+                    <ChevronLeft
+                        name="chevron-left"
+                        size={height *.04}
+                        color={"#2F97C9"}
+                        onPress={() => navigation.dispatch(popAction)}
+                    />
+
+                    <Text style={{marginLeft: width*.3, marginTop: 5, fontSize: height*.025, color: "#2F97C9"}}>Edit Profile</Text>
+
+            </View>
+
+
             <View style={styles.root}>
-                <Image source={{uri: profile.ProfilePicture}} style={styles.profilePic} />
+                
+                <Image source={{uri: profile.ProfilePicture}} style={styles.profilePic}/>
+
                 <CustomInput onChangeText={setFirstName} value={firstName} placeholder={profile.FirstName} />
                 <CustomInput onChangeText={setLastName} value={lastName} placeholder={profile.LastName} />
 
@@ -81,7 +83,10 @@ const styles = StyleSheet.create({
     },
     profilePicContainer: {
         flex: 1,
-        alignItems: "center"
+        alignItems: "center",
+        height: height/5,
+        width: height/5,
+        borderRadius: height /2.5
 	},
 	profilePic: {
 		height: height / 5,
