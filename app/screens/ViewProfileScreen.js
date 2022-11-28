@@ -1,35 +1,87 @@
 import React, { useState, useContext, useEffect } from "react";
 import { Dimensions, StyleSheet, View, Image, ScrollView, Text, Pressable } from "react-native";
 import { useRoute } from "@react-navigation/native";
-import { fetchUser } from '../api/user';
+import { fetchUser, unfollow, follow } from '../api/user';
 import { SafeAreaView } from "react-native-safe-area-context";
 import { scale } from "react-native-size-matters";
 import { widthPercentageToDP } from 'react-native-responsive-screen';
 import Work from "react-native-vector-icons/MaterialIcons";
 import School from "react-native-vector-icons/Ionicons";
-import LoginStatusProvider from "../context/LoginStatusProvider";
+import { useNavigation, StackActions } from "@react-navigation/native";
+import FollowButton from "../components/FollowButton"
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import ChevronLeft from "react-native-vector-icons/Feather"
 
 var height = Dimensions.get("window").height;
 var width = Dimensions.get("window").width;
 
 const ViewProfileScreen = ({ route }) => {
-    const { id } = route.params;
+    const { id, myProfile } = route.params;
+    const navigation = useNavigation();
+    const popAction = StackActions.pop(1);
     const [profile, setProfile] = useState([]);
-    const { myProfile, setMyProfile, setIsSigningOut, ...loginContext } = useContext(LoginStatusProvider);
     const [followers, setFollowers] = useState([]);
     const [following, setFollowing] = useState([]);
-    
-    
+    let isFollowing = false;
+    let buttonText = "Follow";
+
+
+    for(const followingId of myProfile.Following) {
+        if(followingId === id) {
+            isFollowing = true;
+            buttonText = "Unfollow";
+            break;
+        }
+    }
 
     useEffect(() => {
         (async () => {
+            for(const followingId of myProfile.Following) {
+                if(followingId === id) {
+                    isFollowing = true;
+                    buttonText = "Unfollow";
+                    break;
+                }
+                
+                isFollowing = false;
+                buttonText = "Follow";
+            }
+
+           
             const res = await fetchUser(id);
             setProfile(res);
             setFollowers(res.Followers.length);
             setFollowing(res.Following.length);
-        })();
-    }, []);
 
+        })();
+    }, [isFollowing]);
+
+    const onFollowButtonPressed = () => {
+        console.log("follow button pressed");
+
+        if(isFollowing) {
+
+
+            (async () => {
+                const token = await AsyncStorage.getItem("token");
+                await unfollow(myProfile.Id, id, token);
+                isFollowing = false;
+                buttonText = "Follow";
+            })();
+        }
+        
+        (async () => {
+            const token = await AsyncStorage.getItem("token");
+            console.log(myProfile.Login);
+            const res = await follow(myProfile.Id, profile.Login, token);
+
+            console.log(res);
+            isFollowing = true;
+            buttonText = "Unfollow";
+        })();
+        
+        //window.location.href = "ViewProfileScreen"
+    }
     
     return(
         <SafeAreaView
@@ -40,6 +92,14 @@ const ViewProfileScreen = ({ route }) => {
         }}
         style={{height: height}}
     >
+        <View style={{flexDirection: "row"}}>
+                    <ChevronLeft
+                        name="chevron-left"
+                        size={height *.04}
+                        color={"#000"}
+                        onPress={() => navigation.dispatch(popAction)}
+                    />
+        </View>
         {profile && (
             <View style={styles.root}>
                 <View style={[styles.profilePicContainer]}>
@@ -100,6 +160,12 @@ const ViewProfileScreen = ({ route }) => {
                         <Text style={{fontSize: height * .018, fontWeight: "bold"}}>{following}</Text>
                         <Text style={{fontSize: height * .018}}> Following</Text>
                 </View>
+
+
+                <FollowButton
+                    text={buttonText}
+                    onPress={onFollowButtonPressed}
+                />
             </View>
         )}
     </SafeAreaView>

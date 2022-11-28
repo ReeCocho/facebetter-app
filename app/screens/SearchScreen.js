@@ -66,7 +66,8 @@ const SearchScreen = () => {
                             onStartShouldSetResponder={() => 
                                 {console.log(item.Id)
                                 navigation.navigate("ViewProfileScreen", {
-                                id: item.Id
+                                id: item.Id,
+                                myProfile: profile
                             })}}>
                             
                             

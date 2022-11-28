@@ -11,6 +11,7 @@ import Work from "react-native-vector-icons/MaterialIcons";
 import School from "react-native-vector-icons/Ionicons";
 import Search from "react-native-vector-icons/Feather";
 import Messages from "react-native-vector-icons/Feather";
+import LogOut from "react-native-vector-icons/Feather";
 import FollowersScreen from "./FollowersScreen";
 import FollowingScreen from "./FollowingScreen";
 
@@ -28,6 +29,10 @@ export default function ProfileScreen() {
 
 	};
 
+	const onLogOutPressed = () => {
+		console.log("log out button pressed");
+	};
+
 	return (
 		<View>
 			<View style={{
@@ -35,11 +40,12 @@ export default function ProfileScreen() {
 				justifyContent: "space-between",
 				paddingHorizontal: width * .05,
 				paddingTop: height * .01}}>
-				<Messages
-					name="message-circle"
+				
+				<LogOut
+					name="log-out"
 					size={height * .045}
 					color={"#000"}
-					onPress={() => navigation.navigate("MessagesScreen")}
+					onPress={onLogOutPressed}
 				/>
 				<Search
 					name="search"
@@ -124,11 +130,19 @@ export default function ProfileScreen() {
 								onPress={onEditProfilePressed}
 							/>
 						</View>
+
+						<View>
+							<Messages
+								name="message-circle"
+								size={height * .065}
+								color={"#000"}
+								onPress={() => navigation.navigate("MessagesScreen")}
+								style={styles.messagesButton}
+							/>
+						</View>
 					</View>
 				)}
 			</SafeAreaView>
-
-
 		</View>
 	);
 }
@@ -186,5 +200,9 @@ const styles = StyleSheet.create({
 	followingContainer: {
 		marginTop: scale(10),
 		flexDirection: "row"
+	},
+	messagesButton: {
+		marginTop: scale(140),
+		marginLeft: scale(270)
 	}
 });
