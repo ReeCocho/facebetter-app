@@ -16,26 +16,27 @@ export function LoginStatusProvider({ children }) {
 			setIsLoading(true);
 			let token = null;
 			//comment this try catch block to remove auto login
+            //todo: maybe make the getting of all jwt tokens in user.js
 			try {
-                token = await AsyncStorage.getItem("token");
+				token = await AsyncStorage.getItem("token");
 			} catch (error) {
 				console.log("error fetching token ", error);
 			}
 			if (token !== null) {
-                let response = await validateJWT(token);
-                if (response == undefined) {
-                    console.log("Did not receive response from jwt verify call");
-                    setjwtToken(null);
-					setIsLoading(false);
-					return;
-                }   
-                if (response.Error != null) {
-                    console.log("Error verifying jwt token", response.Error);
+				let response = await validateJWT(token);
+				if (response == undefined) {
+					console.log("Did not receive response from jwt verify call");
 					setjwtToken(null);
 					setIsLoading(false);
 					return;
-                }
-                token = jwtDecode(response);
+				}
+				if (response.Error != null) {
+					console.log("Error verifying jwt token", response.Error);
+					setjwtToken(null);
+					setIsLoading(false);
+					return;
+				}
+				token = jwtDecode(response);
 				response = await fetchUser(token.userId);
 				if (response.Error !== null) {
 					console.log("Error getting user profile", response.Error);
@@ -46,11 +47,11 @@ export function LoginStatusProvider({ children }) {
 				const { Error, ...profile } = response;
 				setProfile(profile);
 				setjwtToken(token);
-			} else { 
-                setIsLoading(false);
-                setProfile(null);
-                setjwtToken(null);
-            }
+			} else {
+				setIsLoading(false);
+				setProfile(null);
+				setjwtToken(null);
+			}
 			setIsLoading(false);
 		};
 		retrieveAppStatus();
